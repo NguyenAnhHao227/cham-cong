@@ -322,8 +322,7 @@ function loadKiosk(quiet) {
     bar.innerHTML = d.requirePhoto ? '<div class="photobar">📷 Hôm nay chấm công cần chụp ảnh khuôn mặt</div>' : '';
     $('#grid').innerHTML = d.emps.length ? d.emps.map(function (e) {
       var st = e.state === 'IN' ? '<span class="st in">● Đang làm từ ' + hm(e.since) + '</span>' : '<span class="st">Chưa vào ca</span>';
-      return '<button class="emp ' + (e.state === 'IN' ? 'in' : '') + '" data-act="pick" data-id="' + esc(e.id) + '">' + av(e.name, e.id) + '<b>' + esc(e.name) + '</b>' + st +
-        (e.shifts.length ? '<small>Hôm nay: ' + esc(e.shifts.join(', ')) + '</small>' : '') + '</button>';
+      return '<button class="emp ' + (e.state === 'IN' ? 'in' : '') + '" data-act="pick" data-id="' + esc(e.id) + '">' + av(e.name, e.id) + '<b>' + esc(e.name) + '</b>' + st + '</button>';
     }).join('') : '<div class="muted">Chưa có nhân viên. Quản lý hãy thêm nhân viên.</div>';
   }).catch(function (e) {
     if (e.code === 'NOKIOSK') { S.kioskToken = ''; lsSet('kioskToken', null); S.boot.isKiosk = false; return vLogin(); }
@@ -345,13 +344,12 @@ ACT.pick = function (el) {
   });
 };
 function showAction(r, emp) {
-  var isIn = r.state === 'IN', up = '';
-  if (r.upcoming.length) up = '<div class="sec">Lịch làm sắp tới</div>' + r.upcoming.map(function (u) { return '<div class="muted">' + wd(u.date) + ' ' + dm(u.date) + ' — ' + esc(u.shift) + '</div>'; }).join('');
+  var isIn = r.state === 'IN';
   openSheet('<div class="c">' + '<div class="row" style="justify-content:center">' + av(emp.name, emp.id) + '<h2>' + esc(r.name) + '</h2></div>' +
     (isIn ? '<p class="muted">Bạn đang làm từ ' + hm(r.since) + '</p>' : '') +
     '<button class="big ' + (isIn ? 'no' : 'ok') + '" id="goBtn" data-act="go">' + (r.requirePhoto ? '📷 ' : '') + (isIn ? 'CHỐT CA' : 'MỞ CA') + '</button>' +
     '<input type="file" id="cam" accept="image/*" capture="user" style="display:none">' +
-    '<button class="btn ghost" data-act="sheetClose" style="width:100%">Quay lại</button></div><div style="text-align:left">' + up + '</div>', { sticky: true });
+    '<button class="btn ghost" data-act="sheetClose" style="width:100%">Quay lại</button></div>', { sticky: true });
   S.act = r;
   var cam = $('#cam');
   cam.onchange = function () { if (cam.files && cam.files[0]) readPhoto(cam.files[0]).then(punch).catch(function (e) { toast(e.message); }); };
