@@ -36,6 +36,7 @@ input[type=checkbox]{accent-color:var(--pri)}
 .btn:disabled{opacity:.5}
 .btns{display:flex;gap:8px;margin-top:10px}.btns .btn{flex:1}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.chips:empty{display:none}
+.go{color:var(--mut);font-size:20px;line-height:1;flex:none;margin-left:2px}.subtip{margin:-4px 2px 10px;font-size:13px;color:var(--mut)}
 .erow{display:flex;align-items:center;gap:10px;padding:14px 12px}.erow .etxt{flex:1;min-width:0}.erow .etxt .chips{margin-top:6px;gap:4px}.erow .chip{font-size:12px;padding:2px 8px;white-space:nowrap}.erow .btn{flex:none;padding:12px 14px}
 @media(min-width:420px){.erow{gap:12px;padding:14px 15px}.erow .btn{padding:12px 18px}.erow .chip{font-size:13px;padding:2px 10px}}
 .chip{background:var(--chip);color:var(--ink2);border-radius:999px;padding:2px 10px;font-size:13px;font-weight:600}
@@ -283,7 +284,7 @@ function greet() {
 }
 function resetIdle() {
   clearTimeout(S.idleT);
-  var ms = S.view === 'kiosk' ? 45000 : (S.view === 'mgr' && S.boot && S.boot.isKiosk ? 300000 : 0);
+  var ms = S.view === 'kiosk' ? ((S.kl && S.kl.idleSec > 0 ? S.kl.idleSec : 45) * 1000) : (S.view === 'mgr' && S.boot && S.boot.isKiosk ? 300000 : 0);
   if (ms) S.idleT = setTimeout(onIdle, ms);
 }
 function onIdle() { if (S.view === 'kiosk') { closeSheet(); loadKiosk(true); } else if (S.view === 'mgr') doLogout(); }
@@ -368,7 +369,7 @@ function punch(photo) {
     if (!open && d.otMin) notes.push('Làm thêm ' + d.otMin + ' phút');
     openSheet('<div class="done"><div class="tick">✅</div><h2>' + esc(S.act.name || '') + '</h2><h2>Đã ' + (open ? 'MỞ CA' : 'CHỐT CA') + ' lúc ' + hm(d.at) + '</h2><p class="muted">Chờ quản lý duyệt. Giờ vẫn được tính từ ' + hm(d.at) + '.</p>' +
       (d.shift ? '<p>' + esc(d.shift) + '</p>' : '') + (notes.length ? '<p><b>' + esc(notes.join(' · ')) + '</b></p>' : '') + '</div>', { sticky: false });
-    S.doneT = setTimeout(function () { closeSheet(); loadKiosk(true); }, 3500);
+    S.doneT = setTimeout(function () { closeSheet(); loadKiosk(true); }, ((S.kl && S.kl.doneSec > 0 ? S.kl.doneSec : 4) * 1000));
     loadKiosk(true);
   }).catch(function (e) {
     toast(e.message); closeSheet(); loadKiosk(true);
@@ -692,8 +693,8 @@ function sEmps(my) {
   subShell('Nhân viên', '<button class="btn pri" data-act="empNew">＋ Thêm</button>', '<div class="muted c">Đang tải…</div>');
   api('empList').then(function (d) {
     if (my !== S.seq) return; S.empAll = d.emps;
-    subShell('Nhân viên', '<button class="btn pri" data-act="empNew">＋ Thêm</button>', d.emps.map(function (e) {
-      return '<button class="card" style="' + (e.active ? '' : 'opacity:.5') + '" data-act="empEdit" data-id="' + esc(e.id) + '"><div class="row">' + av(e.name, e.id) + '<div class="grow"><b>' + esc(e.name) + '</b><div class="muted">' + (e.role === 'CHU' ? 'Chủ' : e.role === 'QL' ? 'Quản lý' : 'Nhân viên') + (e.active ? '' : ' · đã nghỉ') + (e.track ? '' : ' · không chấm công') + '</div></div><div class="money">' + (e.rate ? money(e.rate) + '<small class="muted">' + PAYU[e.payType] + '</small>' : '') + '</div></div></button>';
+    subShell('Nhân viên', '<button class="btn pri" data-act="empNew">＋ Thêm</button>', '<div class="subtip">Bấm vào một người để sửa tên, lương, PIN hoặc xoá.</div>' + d.emps.map(function (e) {
+      return '<button class="card" style="' + (e.active ? '' : 'opacity:.5') + '" data-act="empEdit" data-id="' + esc(e.id) + '"><div class="row">' + av(e.name, e.id) + '<div class="grow"><b>' + esc(e.name) + '</b><div class="muted">' + (e.role === 'CHU' ? 'Chủ' : e.role === 'QL' ? 'Quản lý' : 'Nhân viên') + (e.active ? '' : ' · đã nghỉ') + (e.track ? '' : ' · không chấm công') + '</div></div><div class="money">' + (e.rate ? money(e.rate) + '<small class="muted">' + PAYU[e.payType] + '</small>' : '') + '</div><span class="go">✎</span></div></button>';
     }).join(''));
   }).catch(fail);
 }
@@ -709,7 +710,8 @@ function empForm(e) {
       { k: 'allowance', label: 'Phụ cấp cố định / tháng (đ)', type: 'number', hint: 'Cộng vào lương tháng nếu có đi làm.' },
       { k: 'pin', label: e ? 'PIN mới (để trống nếu không đổi)' : 'PIN (4 số)', type: 'pin' },
       { k: 'active', label: 'Đang làm việc', type: 'switch' }, { k: 'note', label: 'Ghi chú' }],
-    onSave: function (v) { v.id = e && e.id; return api('empSave', { emp: v }).then(function () { toast('Đã lưu'); openSub('emps'); }); }
+    onSave: function (v) { v.id = e && e.id; return api('empSave', { emp: v }).then(function () { toast('Đã lưu'); openSub('emps'); }); },
+    onDelete: e ? function () { return api('empDelete', { id: e.id }).then(function () { closeSheet(); toast('Đã xoá nhân viên'); openSub('emps'); }).catch(function (x) { closeSheet(); toast(x.message); }); } : null
   });
 }
 ACT.empNew = function () { empForm(null); };
@@ -720,8 +722,8 @@ function sShifts(my) {
   subShell('Ca làm', '<button class="btn pri" data-act="shNew">＋ Thêm</button>', '<div class="muted c">Đang tải…</div>');
   api('shiftList').then(function (d) {
     if (my !== S.seq) return; S.shAll = d.shifts;
-    subShell('Ca làm', '<button class="btn pri" data-act="shNew">＋ Thêm</button>', d.shifts.map(function (s) {
-      return '<button class="card" style="' + (s.active ? '' : 'opacity:.5') + '" data-act="shEdit" data-id="' + esc(s.id) + '"><div class="row"><div class="grow"><b>' + esc(s.name) + '</b><div class="muted">' + s.start + ' – ' + s.end + (s.breakMin ? ' · nghỉ ' + s.breakMin + 'p' : '') + '</div></div><div class="chips" style="margin:0">' + (s.mult !== 1 ? '<span class="chip ok">Hệ số x' + s.mult + '</span>' : '') + (s.allowance ? '<span class="chip">PC ' + money(s.allowance) + '</span>' : '') + '</div></div></button>';
+    subShell('Ca làm', '<button class="btn pri" data-act="shNew">＋ Thêm</button>', '<div class="subtip">Bấm vào một ca để sửa giờ, hệ số, phụ cấp hoặc xoá.</div>' + d.shifts.map(function (s) {
+      return '<button class="card" style="' + (s.active ? '' : 'opacity:.5') + '" data-act="shEdit" data-id="' + esc(s.id) + '"><div class="row"><div class="grow"><b>' + esc(s.name) + '</b><div class="muted">' + s.start + ' – ' + s.end + (s.breakMin ? ' · nghỉ ' + s.breakMin + 'p' : '') + '</div></div><div class="chips" style="margin:0">' + (s.mult !== 1 ? '<span class="chip ok">Hệ số x' + s.mult + '</span>' : '') + (s.allowance ? '<span class="chip">PC ' + money(s.allowance) + '</span>' : '') + (s.active ? '' : '<span class="chip">Đã tắt</span>') + '</div><span class="go">✎</span></div></button>';
     }).join(''));
   }).catch(fail);
 }
@@ -731,7 +733,8 @@ function shForm(s) {
     fields: [{ k: 'name', label: 'Tên ca (vd: Ca sáng)' }, { k: 'start', label: 'Giờ bắt đầu', type: 'time' }, { k: 'end', label: 'Giờ kết thúc', type: 'time', hint: 'Ca qua đêm: giờ kết thúc nhỏ hơn giờ bắt đầu (vd 22:00 → 06:00).' },
       { k: 'breakMin', label: 'Nghỉ không lương (phút)', type: 'number' }, { k: 'mult', label: 'Hệ số lương (1 = bình thường, 1.3 = ca đêm…)', type: 'number' },
       { k: 'allowance', label: 'Phụ cấp mỗi ca (đ)', type: 'number' }, { k: 'active', label: 'Đang dùng', type: 'switch' }],
-    onSave: function (v) { v.id = s && s.id; return api('shiftSave', { shift: v }).then(function () { toast('Đã lưu'); openSub('shifts'); }); }
+    onSave: function (v) { v.id = s && s.id; return api('shiftSave', { shift: v }).then(function () { toast('Đã lưu'); openSub('shifts'); }); },
+    onDelete: s ? function () { return api('shiftDelete', { id: s.id }).then(function () { closeSheet(); toast('Đã xoá ca'); openSub('shifts'); }).catch(function (x) { closeSheet(); toast(x.message); }); } : null
   });
 }
 ACT.shNew = function () { shForm(null); };
@@ -745,7 +748,7 @@ function sAdj(my) {
     var h = '<div class="subhead"><button class="btn" data-act="mPrev">‹</button><h3 class="grow" style="text-align:center">Tháng ' + S.month.slice(5) + '/' + S.month.slice(0, 4) + '</h3><button class="btn" data-act="mNext">›</button></div>';
     h += a[0].rows.map(function (r) {
       var plus = r.type === 'THUONG' || r.type === 'PHUCAP';
-      return '<button class="card" data-act="adjEdit" data-id="' + esc(r.id) + '"><div class="row"><div class="grow"><b>' + esc(r.name) + '</b> · ' + ADJL[r.type] + '<div class="muted">' + dm(r.date) + (r.note ? ' · ' + esc(r.note) : '') + '</div></div><div class="money" style="color:var(--' + (plus ? 'ok' : 'no') + ')">' + (plus ? '+' : '−') + money(r.amount) + '</div></div></button>';
+      return '<button class="card" data-act="adjEdit" data-id="' + esc(r.id) + '"><div class="row"><div class="grow"><b>' + esc(r.name) + '</b> · ' + ADJL[r.type] + '<div class="muted">' + dm(r.date) + (r.note ? ' · ' + esc(r.note) : '') + '</div></div><div class="money" style="color:var(--' + (plus ? 'ok' : 'no') + ')">' + (plus ? '+' : '−') + money(r.amount) + '</div><span class="go">✎</span></div></button>';
     }).join('') || '<div class="card c muted">Chưa có khoản nào.</div>';
     subShell('Thưởng / phạt / ứng', '<button class="btn pri" data-act="adjNew">＋ Thêm</button>', h);
   }).catch(fail);
@@ -769,7 +772,7 @@ function sHols(my) {
   api('holList').then(function (d) {
     if (my !== S.seq) return; S.holAll = d.rows;
     subShell('Ngày lễ', '<button class="btn pri" data-act="holNew">＋ Thêm</button>', d.rows.map(function (h) {
-      return '<button class="card" data-act="holEdit" data-date="' + h.date + '"><div class="row"><div class="grow"><b>' + esc(h.name) + '</b><div class="muted">' + wd(h.date) + ' ' + dm(h.date) + '/' + h.date.slice(0, 4) + '</div></div><span class="chip ok">Lương x' + h.mult + '</span></div></button>';
+      return '<button class="card" data-act="holEdit" data-date="' + h.date + '"><div class="row"><div class="grow"><b>' + esc(h.name) + '</b><div class="muted">' + wd(h.date) + ' ' + dm(h.date) + '/' + h.date.slice(0, 4) + '</div></div><span class="chip ok">Lương x' + h.mult + '</span><span class="go">✎</span></div></button>';
     }).join('') || '<div class="card c muted">Chưa có ngày lễ. Làm ngày lễ sẽ được nhân hệ số lương.</div>');
   }).catch(fail);
 }
@@ -777,7 +780,7 @@ function holForm(h) {
   openForm({
     title: h ? 'Sửa ngày lễ' : 'Thêm ngày lễ', values: h || { date: ymd(now()), name: '', mult: 2 },
     fields: [{ k: 'date', label: 'Ngày', type: 'date' }, { k: 'name', label: 'Tên (vd: Quốc khánh)' }, { k: 'mult', label: 'Hệ số lương (vd 2 hoặc 3)', type: 'number' }],
-    onSave: function (v) { return api('holSave', { hol: v }).then(function () { toast('Đã lưu'); openSub('hols'); }); },
+    onSave: function (v) { return api('holSave', { hol: v }).then(function () { return (h && h.date !== v.date) ? api('holDelete', { date: h.date }) : null; }).then(function () { toast('Đã lưu'); openSub('hols'); }); },
     onDelete: h ? function () { return api('holDelete', { date: h.date }).then(function () { closeSheet(); openSub('hols'); }); } : null
   });
 }
@@ -790,7 +793,8 @@ var SETF = [
   ['Chấm công', [['requirePin', 'Nhân viên phải nhập PIN (tắt: chỉ cần bấm tên rồi xác nhận)', 'switch']]],
   ['Đi trễ / về sớm', [['lateGrace', 'Cho phép đi trễ (phút) — trễ ít hơn thì không trừ', 'number'], ['earlyGrace', 'Cho phép về sớm (phút)', 'number'], ['lateFine', 'Phạt cố định mỗi lần đi trễ (đ, 0 = không phạt)', 'number'], ['earlyFine', 'Phạt cố định mỗi lần về sớm (đ)', 'number'], ['countEarly', 'Tính cả giờ đến sớm trước ca', 'switch']]],
   ['Tăng ca', [['otEnabled', 'Tính tăng ca', 'switch'], ['otAfter', 'Chỉ tính khi làm quá giờ ca từ (phút)', 'number'], ['otMult', 'Hệ số tăng ca (1.5 = 150%)', 'number']]],
-  ['Tính lương', [['stdDays', 'Số ngày công chuẩn / tháng (lương tháng)', 'number'], ['stdHours', 'Số giờ / ngày công', 'number'], ['autoMatchShift', 'Chưa xếp lịch thì tự gán ca gần nhất (±2 giờ)', 'switch'], ['maxShiftHours', 'Ca mở quá bao nhiêu giờ thì coi là quên chốt', 'number']]],
+  ['Tính lương', [['stdDays', 'Số ngày công chuẩn / tháng (lương tháng)', 'number'], ['stdHours', 'Số giờ / ngày công', 'number'], ['autoMatchShift', 'Chưa xếp lịch thì tự gán ca gần nhất (±2 giờ)', 'switch'], ['maxShiftHours', 'Ca mở quá bao nhiêu giờ thì coi là quên chốt', 'number'], ['matchWindow', 'Tự gán ca: chấm công cách giờ bắt đầu ca tối đa (phút)', 'number']]],
+  ['Màn hình iPad', [['kioskIdleSec', 'Tự về màn hình chính sau (giây không chạm)', 'number'], ['doneSec', 'Màn "Đã ghi nhận" hiện trong (giây)', 'number']]],
   ['Ảnh', [['requirePhoto', 'Bắt buộc chụp ảnh khi chấm công (bật khi bạn không ở quán)', 'switch']]]
 ];
 function sSettings(my) {
