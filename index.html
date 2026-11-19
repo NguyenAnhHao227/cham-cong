@@ -55,7 +55,7 @@ h1,h2,h3{margin:0}
 .hi{margin-top:2px;font-size:13px;font-weight:600;color:var(--mut)}
 .clock{text-align:right;flex:none}.clock b{font-size:30px;display:block;line-height:1;color:var(--pri);font-variant-numeric:tabular-nums}.clock span{color:var(--mut);font-size:12px}
 .kmain{width:100%;max-width:1100px;margin:0 auto;padding:16px 16px 28px;flex:1;display:flex;flex-direction:column;gap:14px}
-.kgrid{display:grid;grid-template-columns:1fr;gap:14px;align-content:start;flex:1}
+.kgrid{display:grid;grid-template-columns:1fr;gap:14px;align-content:stretch;flex:1}
 @media(min-width:760px) and (orientation:landscape){.kgrid{grid-template-columns:1.05fr 1fr;align-items:stretch}}
 .qrcard{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center}
 #qrBox{width:min(100%,520px,58vh);aspect-ratio:1;display:flex;align-items:center;justify-content:center}
@@ -67,16 +67,25 @@ h1,h2,h3{margin:0}
 .kban .logo{width:56px;height:56px;font-size:28px;border-radius:18px}
 .kban h1{font-size:26px}.hi{font-size:15px}
 .clock b{font-size:42px}.clock span{font-size:14px}
-.step b{font-size:19px}.step .d{font-size:16px}.steps h2{font-size:22px}.sn{width:52px;height:52px;font-size:26px}.step:not(:last-child):before{left:25px;top:52px}
 }
 /* hướng dẫn dạng infographic */
 .steps{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:16px 18px;box-shadow:var(--shadow);text-align:left;display:flex;flex-direction:column;justify-content:center;margin:0 0 14px}
 .kgrid .steps{margin:0}
 .steps h2{font-size:18px;margin-bottom:12px}
-.step{display:flex;gap:14px;position:relative;padding-bottom:16px;align-items:flex-start}.step:last-child{padding-bottom:0}
-.step:not(:last-child):before{content:"";position:absolute;left:21px;top:44px;bottom:2px;width:2px;background:var(--line)}
+.stl{display:flex;flex-direction:column;gap:18px}
+.step{display:flex;gap:14px;position:relative;align-items:center}
+.step:not(:last-child):before{content:"";position:absolute;left:21px;top:46px;bottom:-16px;width:2px;background:var(--line)}
 .sn{width:44px;height:44px;border-radius:50%;background:var(--pri);color:#fff;display:grid;place-items:center;font-size:22px;flex:none;box-shadow:var(--lift)}
 .step b{display:block;font-size:16px;line-height:1.3}.step .d{display:block;color:var(--mut);font-size:14px}
+/* iPad / màn rộng: chữ và biểu tượng lớn hơn, dàn đều cho vừa khung */
+@media(min-width:700px){
+.steps{padding:26px 30px}.steps h2{font-size:28px;margin-bottom:24px}
+.stl{gap:34px}.step{gap:20px}
+.sn{width:68px;height:68px;font-size:34px}
+.step:not(:last-child):before{left:33px;top:72px;bottom:-32px}
+.step b{font-size:23px}.step .d{font-size:18px;margin-top:2px}
+}
+.kcta{display:flex;justify-content:center}.kcta .btn{min-width:min(100%,360px);font-size:19px;min-height:60px;justify-content:center}
 .staffcta{background:linear-gradient(180deg,#1aa0ff,#0070d6);color:#fff;border-radius:24px;padding:18px;text-align:center;box-shadow:var(--lift);margin:0 0 14px}
 .staffcta h2{font-size:22px}.staffcta p{margin:4px 0 14px;opacity:.92}
 .staffcta .btn{background:#fff;color:var(--pri2);border-color:#fff;width:100%;font-size:18px;font-weight:800;min-height:56px;box-shadow:none}
@@ -384,10 +393,20 @@ function stepsHTML() {
   var st = [['📲', 'Cài ứng dụng', IOS ? 'Bấm Chia sẻ → Thêm vào MH chính.' : 'Bấm ⋮ → Cài đặt ứng dụng.'],
     ['🔑', 'Đăng nhập nhân viên', 'Nhập mã 4 số quản lý đưa. Chỉ làm 1 lần.'],
     ['📷', 'Bấm Chấm công', 'Quét mã QR trên màn hình iPad.']];
-  return '<section class="steps"><h2>Cách chấm công</h2>' + st.map(function (s, i) {
+  return '<section class="steps"><h2>Cách chấm công</h2><div class="stl">' + st.map(function (s, i) {
     return '<div class="step"><div class="sn">' + s[0] + '</div><div><b>' + (i + 1) + '. ' + s[1] + '</b><span class="d">' + s[2] + '</span></div></div>';
-  }).join('') + '</section>';
+  }).join('') + '</div></section>';
 }
+/* Trên iPad: nút "Đăng nhập nhân viên" hiện mã QR mở ứng dụng, để nhân viên quét bằng camera điện thoại (iPad không dùng để đăng nhập). */
+ACT.phoneLink = function () {
+  var url = location.href.split('?')[0].split('#')[0];
+  loadLib('qr').then(function () {
+    openSheet('<div class="c"><h2>Mở ứng dụng trên điện thoại của bạn</h2><p class="muted" style="margin:4px 0 10px">Quét mã này bằng camera điện thoại, rồi bấm <b>Đăng nhập nhân viên</b>.</p>' +
+      '<div style="width:min(100%,280px);margin:0 auto">' + qrSvg(url) + '</div>' +
+      '<p class="muted" style="font-size:13px;margin:10px 0 0">' + 'iPhone: sau khi mở, bấm Chia sẻ → Thêm vào MH chính, rồi đăng nhập từ biểu tượng mới.</p>' +
+      '<div class="btns"><button class="btn pri" data-act="sheetClose">Đóng</button></div></div>');
+  }).catch(function (e) { toast(e.message); });
+};
 function mgrLink() { return '<div class="kfoot"><button class="btn ghost" data-act="mgrLogin" style="justify-content:center;display:inline-flex;width:auto">Đăng nhập dưới quyền quản lý</button></div>'; }
 function vHome() { if (S.boot.isKiosk) vKiosk(); else if (lsGet('deviceKey')) vStaff(); else vWelcome(); }
 ACT.toHome = function () { vHome(); };
@@ -395,7 +414,7 @@ ACT.toHome = function () { vHome(); };
 function vKiosk() {
   stopTimers(); S.view = 'kiosk'; closeSheet();
   app.innerHTML = '<div class="kiosk"><header class="kban"><div class="logo">' + esc(logoCh()) + '</div><div class="ktxt"><h1>' + esc(S.boot.shopName) + '</h1><div class="hi" id="hi"></div></div><div class="clock"><b id="clk"></b><span id="dt"></span></div></header>' +
-    '<div class="kmain"><div class="kgrid"><section class="qrcard"><div id="qrBox"><span class="muted">Đang tạo mã…</span></div><div class="qrbar"><i id="qrFill"></i></div><p class="qrtip">Mã tự đổi liên tục — phải quét trực tiếp trên màn hình này</p></section>' + stepsHTML() + '</div>' + mgrLink() + '</div></div>';
+    '<div class="kmain"><div class="kgrid"><section class="qrcard"><div id="qrBox"><span class="muted">Đang tạo mã…</span></div><div class="qrbar"><i id="qrFill"></i></div><p class="qrtip">Mã tự đổi liên tục — phải quét trực tiếp trên màn hình này</p></section>' + stepsHTML() + '</div><div class="kcta"><button class="btn pri" data-act="phoneLink">📱 Đăng nhập nhân viên</button></div>' + mgrLink() + '</div></div>';
   startClock(); loadKioskInfo(); keepAwake(); resetIdle();
 }
 ACT.kioskRetry = function () { loadKioskInfo(); };
