@@ -397,16 +397,8 @@ function stepsHTML() {
     return '<div class="step"><div class="sn">' + s[0] + '</div><div><b>' + (i + 1) + '. ' + s[1] + '</b><span class="d">' + s[2] + '</span></div></div>';
   }).join('') + '</div></section>';
 }
-/* Trên iPad: nút "Đăng nhập nhân viên" hiện mã QR mở ứng dụng, để nhân viên quét bằng camera điện thoại (iPad không dùng để đăng nhập). */
-ACT.phoneLink = function () {
-  var url = location.href.split('?')[0].split('#')[0];
-  loadLib('qr').then(function () {
-    openSheet('<div class="c"><h2>Mở ứng dụng trên điện thoại của bạn</h2><p class="muted" style="margin:4px 0 10px">Quét mã này bằng camera điện thoại, rồi bấm <b>Đăng nhập nhân viên</b>.</p>' +
-      '<div style="width:min(100%,280px);margin:0 auto">' + qrSvg(url) + '</div>' +
-      '<p class="muted" style="font-size:13px;margin:10px 0 0">' + 'iPhone: sau khi mở, bấm Chia sẻ → Thêm vào MH chính, rồi đăng nhập từ biểu tượng mới.</p>' +
-      '<div class="btns"><button class="btn pri" data-act="sheetClose">Đóng</button></div></div>');
-  }).catch(function (e) { toast(e.message); });
-};
+/* Nút nhân viên trên màn hình iPad: chưa đăng nhập thì đăng nhập ngay; đã đăng nhập thì vào màn Chấm công. */
+ACT.kioskStaff = function () { if (lsGet('deviceKey')) vStaff(); else ACT.enroll(); };
 function mgrLink() { return '<div class="kfoot"><button class="btn ghost" data-act="mgrLogin" style="justify-content:center;display:inline-flex;width:auto">Đăng nhập dưới quyền quản lý</button></div>'; }
 function vHome() { if (S.boot.isKiosk) vKiosk(); else if (lsGet('deviceKey')) vStaff(); else vWelcome(); }
 ACT.toHome = function () { vHome(); };
@@ -414,7 +406,7 @@ ACT.toHome = function () { vHome(); };
 function vKiosk() {
   stopTimers(); S.view = 'kiosk'; closeSheet();
   app.innerHTML = '<div class="kiosk"><header class="kban"><div class="logo">' + esc(logoCh()) + '</div><div class="ktxt"><h1>' + esc(S.boot.shopName) + '</h1><div class="hi" id="hi"></div></div><div class="clock"><b id="clk"></b><span id="dt"></span></div></header>' +
-    '<div class="kmain"><div class="kgrid"><section class="qrcard"><div id="qrBox"><span class="muted">Đang tạo mã…</span></div><div class="qrbar"><i id="qrFill"></i></div><p class="qrtip">Mã tự đổi liên tục — phải quét trực tiếp trên màn hình này</p></section>' + stepsHTML() + '</div><div class="kcta"><button class="btn pri" data-act="phoneLink">📱 Đăng nhập nhân viên</button></div>' + mgrLink() + '</div></div>';
+    '<div class="kmain"><div class="kgrid"><section class="qrcard"><div id="qrBox"><span class="muted">Đang tạo mã…</span></div><div class="qrbar"><i id="qrFill"></i></div><p class="qrtip">Mã tự đổi liên tục — phải quét trực tiếp trên màn hình này</p></section>' + stepsHTML() + '</div><div class="kcta"><button class="btn pri" data-act="kioskStaff">' + (lsGet('deviceKey') ? '📷 Chấm công' : '📱 Đăng nhập nhân viên') + '</button></div>' + mgrLink() + '</div></div>';
   startClock(); loadKioskInfo(); keepAwake(); resetIdle();
 }
 ACT.kioskRetry = function () { loadKioskInfo(); };
@@ -524,8 +516,8 @@ ACT.trustGo = function (el) {
 /* ---------- Màn hình của nhân viên mỗi lần mở ứng dụng ---------- */
 function vStaff() {
   stopTimers(); S.view = 'staff'; closeSheet();
-  var key = lsGet('deviceKey'); if (!key) return vWelcome();
-  app.innerHTML = '<div class="shome"><div class="hello" id="hello">&nbsp;</div><button class="punchbtn" data-act="scanStart">Chấm công</button><div class="muted" id="sstate">&nbsp;</div>' + mgrLink() + '</div>';
+  var key = lsGet('deviceKey'); if (!key) return vHome();
+  app.innerHTML = '<div class="shome"><div class="hello" id="hello">&nbsp;</div><button class="punchbtn" data-act="scanStart">Chấm công</button><div class="muted" id="sstate">&nbsp;</div>' + (S.boot.isKiosk ? '<div class="kfoot"><button class="btn ghost" data-act="toHome" style="justify-content:center;display:inline-flex;width:auto">← Màn hình mã QR</button></div>' : '') + mgrLink() + '</div>';
   call('deviceHome', { key: key }).then(function (d) {
     if (S.view !== 'staff') return;
     S.clockOff = d.serverNow - Date.now();
@@ -533,7 +525,7 @@ function vStaff() {
     if (h) h.textContent = 'Xin chào, ' + d.name;
     if (s) s.textContent = d.state === 'IN' ? 'Đang làm từ ' + hm(d.since) : '';
   }).catch(function (e) {
-    if (e.code === 'NODEVICE') { lsSet('deviceKey', null); toast(e.message); if (S.view === 'staff') vWelcome(); return; }
+    if (e.code === 'NODEVICE') { lsSet('deviceKey', null); toast(e.message); if (S.view === 'staff') vHome(); return; }
     var s = $('#sstate'); if (s) s.textContent = e.message;
   });
 }
@@ -584,7 +576,7 @@ function onQr(text) {
   S.scanBusy = true; scanMsg('Đang xác nhận…');
   if (navigator.vibrate) navigator.vibrate(60);
   call('devicePunch', { key: lsGet('deviceKey'), qr: text }).then(function (d) { stopScan(); showPunchDone(d); }).catch(function (e) {
-    if (e.code === 'NODEVICE') { stopScan(); lsSet('deviceKey', null); toast(e.message); vWelcome(); return; }
+    if (e.code === 'NODEVICE') { stopScan(); lsSet('deviceKey', null); toast(e.message); vHome(); return; }
     if (e.code === 'TOOFAST' || e.code === 'LOCK') { stopScan(); vStaff(); openSheet('<div class="c"><div style="font-size:48px">⏳</div><h2>' + esc(e.message) + '</h2><div class="btns"><button class="btn pri" data-act="sheetClose">Đã hiểu</button></div></div>'); return; }
     scanMsg(e.message);
     setTimeout(function () { S.scanBusy = false; }, 2200); // mã hết hạn / lỗi mạng: tiếp tục quét
