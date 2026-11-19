@@ -77,7 +77,17 @@ h1,h2,h3{margin:0}
 .ov{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50}
 .sheet{background:var(--bg);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:28px 28px 0 0;padding:12px 18px 26px;box-shadow:0 -6px 30px rgba(15,23,42,.2);position:relative}
 .sheet:before{content:"";display:block;width:40px;height:4px;border-radius:4px;background:#cbd5e1;margin:0 auto 14px}
-@media(min-width:700px){.ov{align-items:center}.sheet{border-radius:28px}}
+@media(min-width:700px){.ov{align-items:center}.sheet{border-radius:28px}.sheet.pinsheet{max-width:380px;padding:12px 24px 24px}.pinsheet .keys{max-width:270px}.pinsheet .keys button{height:60px;font-size:24px}}
+/* xoay ngang trên điện thoại (màn thấp): PIN chia hai cột, tên + chấm bên trái, bàn phím bên phải */
+@media(max-height:520px){
+  .ov{align-items:center}.sheet{max-height:96vh;border-radius:22px;padding:8px 16px 14px}.sheet:before{margin-bottom:6px}
+  .sheet.pinsheet{max-width:620px}
+  .pinsheet .pin{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto auto 1fr;column-gap:20px;align-items:start}
+  .pinsheet .pin>*{grid-column:1}.pinsheet .pin .keys{grid-column:2;grid-row:1/span 4;max-width:none;margin:0;gap:8px}
+  .pinsheet .pin h2{font-size:20px;margin-top:18px}.pinsheet .keys button{height:46px;font-size:22px;border-radius:14px}
+  .big{min-height:64px;font-size:24px;margin:6px 0}
+  .done .tick{font-size:48px}
+}
 .pin{text-align:center}.pin h2{font-size:22px}.pin .sub{margin:2px 0 10px;color:var(--mut)}
 .dots{display:flex;gap:14px;justify-content:center;margin:10px 0}
 .dots i{width:18px;height:18px;border-radius:50%;border:2px solid var(--mut)}.dots i.on{background:var(--pri);border-color:var(--pri)}
@@ -200,7 +210,7 @@ function api(method, payload) { payload = payload || {}; payload.token = S.token
 /* ---------- sheet (hộp thoại) ---------- */
 function openSheet(html, o) {
   var host = $('#sheetHost');
-  host.innerHTML = '<div class="ov"><div class="sheet">' + html + '</div></div>';
+  host.innerHTML = '<div class="ov"><div class="sheet' + (o && o.cls ? ' ' + o.cls : '') + '">' + html + '</div></div>';
   var ov = host.firstChild;
   ov.addEventListener('click', function (e) { if (e.target === ov && !(o && o.sticky)) closeSheet(); });
 }
@@ -217,7 +227,7 @@ function showPin(title, sub, onDone) {
   var k = '';
   for (var n = 1; n <= 9; n++) k += '<button data-act="key" data-k="' + n + '">' + n + '</button>';
   openSheet('<div class="pin"><h2>' + esc(title) + '</h2><p class="sub">' + esc(sub || '') + '</p><div class="dots" id="dots"><i></i><i></i><i></i><i></i></div><div class="perr" id="perr"></div><div class="keys">' + k +
-    '<button class="ghost" data-act="sheetClose">Huỷ</button><button data-act="key" data-k="0">0</button><button class="ghost" data-act="key" data-k="x">⌫</button></div></div>');
+    '<button class="ghost" data-act="sheetClose">Huỷ</button><button data-act="key" data-k="0">0</button><button class="ghost" data-act="key" data-k="x">⌫</button></div></div>', { cls: 'pinsheet' });
   S.pinState = { val: '', busy: false, onDone: onDone };
 }
 function paintDots() { var d = document.querySelectorAll('#dots i'), v = S.pinState ? S.pinState.val.length : 0; for (var i = 0; i < d.length; i++) d[i].className = i < v ? 'on' : ''; }
@@ -550,20 +560,22 @@ function drawSched() {
   var shiftOf = {}; d.shifts.forEach(function (x) { shiftOf[x.id] = x; });
   var h = '<div class="subhead"><button class="btn" data-act="wkPrev" aria-label="Tuần trước">‹</button><h2 class="c">Tuần ' + dm(d.days[0]) + ' – ' + dm(d.days[6]) + '</h2><button class="btn" data-act="wkNext" aria-label="Tuần sau">›</button></div>';
   h += '<div class="days">' + d.days.map(function (x) {
-    var n = d.rows.filter(function (r) { return r.date === x && shiftOf[r.shiftId]; }).length;
+    var seenE = {}, n = 0; d.rows.forEach(function (r) { if (r.date === x && shiftOf[r.shiftId] && !seenE[r.empId]) { seenE[r.empId] = 1; n++; } });
     return '<button class="dchip' + (x === S.day ? ' on' : '') + (x === today ? ' today' : '') + '" data-act="day" data-d="' + x + '"><span>' + wd(x) + '</span><b>' + x.slice(8) + '</b><i>' + (n ? n + ' người' : '—') + '</i></button>';
   }).join('') + '</div>';
   h += '<div class="dtitle"><b>' + wd(S.day) + ', ' + dm(S.day) + '</b>' + (S.day === today ? ' <span class="chip ok">Hôm nay</span>' : '') + (hol[S.day] ? ' <span class="chip warn">🎉 ' + esc(hol[S.day]) + '</span>' : '') + '</div>';
   if (!d.shifts.length) h += '<div class="card">Chưa có ca nào. Vào Thêm → Ca làm để tạo ca (ví dụ Ca sáng 08:00–12:00).</div>';
   else if (!d.emps.length) h += '<div class="card c muted">Chưa có nhân viên cần xếp ca.</div>';
   h += d.emps.map(function (e) {
-    var r = d.rows.filter(function (q) { return q.empId === e.id && q.date === S.day; })[0], cur = r && shiftOf[r.shiftId];
+    var cur = d.rows.filter(function (q) { return q.empId === e.id && q.date === S.day && shiftOf[q.shiftId]; }).map(function (q) { return shiftOf[q.shiftId]; })
+      .sort(function (a, b) { return a.start < b.start ? -1 : a.start > b.start ? 1 : 0; });
+    var onIds = {}; cur.forEach(function (c) { onIds[c.id] = 1; });
     var opts = d.shifts.map(function (x) {
-      return '<button class="opt' + (cur && cur.id === x.id ? ' on' : '') + '" data-act="pickSh" data-emp="' + esc(e.id) + '" data-sh="' + esc(x.id) + '"><b>' + esc(x.name) + '</b><small>' + x.start + '–' + x.end + '</small></button>';
-    }).join('') + '<button class="opt off' + (cur ? '' : ' on') + '" data-act="pickSh" data-emp="' + esc(e.id) + '" data-sh=""><b>Nghỉ</b><small>&nbsp;</small></button>';
-    return '<div class="card"><div class="row">' + av(e.name, e.id) + '<div class="grow"><b>' + esc(e.name) + '</b><div class="muted">' + (cur ? esc(cur.name) + ' · ' + cur.start + '–' + cur.end : 'Chưa xếp ca / nghỉ') + '</div></div></div><div class="opts">' + opts + '</div></div>';
+      return '<button class="opt' + (onIds[x.id] ? ' on' : '') + '" data-act="pickSh" data-emp="' + esc(e.id) + '" data-sh="' + esc(x.id) + '"><b>' + esc(x.name) + '</b><small>' + x.start + '–' + x.end + '</small></button>';
+    }).join('') + '<button class="opt off' + (cur.length ? '' : ' on') + '" data-act="pickSh" data-emp="' + esc(e.id) + '" data-sh=""><b>Nghỉ</b><small>&nbsp;</small></button>';
+    return '<div class="card"><div class="row">' + av(e.name, e.id) + '<div class="grow"><b>' + esc(e.name) + '</b><div class="muted">' + (cur.length ? cur.map(function (c) { return esc(c.name) + ' ' + c.start + '–' + c.end; }).join(' + ') : 'Chưa xếp ca / nghỉ') + '</div></div></div><div class="opts">' + opts + '</div></div>';
   }).join('');
-  h += '<div class="btns"><button class="btn" data-act="wkCopy">📋 Sao chép lịch từ tuần trước</button></div><p class="muted">Bấm vào một ngày ở trên, rồi bấm ca cho từng người. Ca được chọn sẽ có nền xanh.</p>';
+  h += '<div class="btns"><button class="btn" data-act="wkCopy">📋 Sao chép lịch từ tuần trước</button></div><p class="muted">Bấm vào một ngày ở trên, rồi bấm ca cho từng người. Ca được chọn có nền xanh; bấm thêm ca khác để làm nhiều ca trong ngày, bấm lại ca đã chọn để bỏ. "Nghỉ" xoá hết ca của ngày đó.</p>';
   body(h);
 }
 ACT.wkPrev = function () { tSched(addD(S.ws, -7), S.sch.days.indexOf(S.day)); };
@@ -576,11 +588,16 @@ ACT.wkCopy = function () {
 };
 ACT.pickSh = function (el) {
   var emp = el.dataset.emp, sh = el.dataset.sh, date = S.day;
-  api('scheduleSet', { empId: emp, date: date, shiftId: sh }).then(function () {
-    S.sch.rows = S.sch.rows.filter(function (r) { return !(r.empId === emp && r.date === date); });
-    if (sh) S.sch.rows.push({ empId: emp, date: date, shiftId: sh });
-    drawSched();
-  }).catch(function (e) { toast(e.message); });
+  var cur = S.sch.rows.filter(function (r) { return r.empId === emp && r.date === date; }).map(function (r) { return r.shiftId; });
+  var next = !sh ? [] : (cur.indexOf(sh) >= 0 ? cur.filter(function (x) { return x !== sh; }) : cur.concat(sh));
+  // cập nhật màn hình ngay, gửi lên máy chủ lần lượt theo thứ tự bấm
+  S.sch.rows = S.sch.rows.filter(function (r) { return !(r.empId === emp && r.date === date); });
+  next.forEach(function (id) { S.sch.rows.push({ empId: emp, date: date, shiftId: id }); });
+  drawSched();
+  var key = emp + '|' + date; S.schQ = S.schQ || {};
+  S.schQ[key] = (S.schQ[key] || Promise.resolve()).then(function () {
+    return api('scheduleSet', { empId: emp, date: date, shiftIds: next });
+  }).catch(function (e) { toast(e.message); tSched(S.ws, S.sch.days.indexOf(S.day)); });
 };
 
 /* ---------- Tab: Báo cáo ---------- */
