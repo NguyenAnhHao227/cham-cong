@@ -10,16 +10,15 @@
 <meta name="robots" content="noindex">
 <title>Chấm công</title>
 <style>
-:root{--bg:#f3f6f8;--card:#fff;--ink:#14202b;--mut:#6b7885;--line:#e1e7ed;--pri:#0f766e;--ok:#16a34a;--no:#dc2626;--warn:#b45309;--chip:#eef2f6;--okbg:#dcfce7;--warnbg:#fef3c7;--nobg:#fee2e2}
-@media(prefers-color-scheme:dark){:root{--bg:#0f151b;--card:#18222b;--ink:#e8eef3;--mut:#93a1ae;--line:#29353f;--chip:#233039;--okbg:#14391f;--warnbg:#3d2e0a;--nobg:#401a1a;--pri:#2dd4bf}}
+:root{color-scheme:light;--bg:#fff7ec;--card:#fff;--ink:#3a2c25;--mut:#8b786b;--line:#f1e1cf;--pri:#e0640f;--ok:#15803d;--no:#d9363e;--warn:#a85a00;--chip:#fbefe0;--okbg:#dff5e3;--warnbg:#ffeccb;--nobg:#fde0dc;--shadow:0 2px 10px rgba(120,70,20,.08)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+html,body{margin:0;background:var(--bg);background-image:radial-gradient(circle at 12% -10%,#ffe3c2 0,transparent 45%),radial-gradient(circle at 100% 0,#ffefd6 0,transparent 40%);background-attachment:fixed;color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
 button{font:inherit;color:inherit;cursor:pointer}
 input,select{font:inherit;color:inherit}
 .muted{color:var(--mut)}.c{text-align:center}.grow{flex:1;min-width:0}
 .row{display:flex;align-items:center;gap:10px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 10px;display:block;width:100%;text-align:left}
-.btn{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:12px 16px;font-weight:600;min-height:46px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:13px 15px;margin:0 0 10px;display:block;width:100%;text-align:left;box-shadow:var(--shadow)}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:12px 16px;font-weight:600;min-height:48px;box-shadow:var(--shadow)}
 .btn.pri{background:var(--pri);border-color:var(--pri);color:#fff}
 .btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
 .btn.no{background:var(--no);border-color:var(--no);color:#fff}
@@ -34,30 +33,32 @@ h1,h2,h3{margin:0}
 /* kiosk */
 .kiosk{min-height:100vh;display:flex;flex-direction:column;padding:16px;max-width:1100px;margin:0 auto}
 .khead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
-.khead h1{font-size:22px}
-.clock{text-align:right}.clock b{font-size:34px;display:block;line-height:1}.clock span{color:var(--mut);font-size:14px}
+.khead h1{font-size:26px}.khead .hi{color:var(--mut);font-size:16px;margin-top:2px}
+.clock{text-align:right;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:8px 16px;box-shadow:var(--shadow)}.clock b{font-size:34px;display:block;line-height:1.1;color:var(--pri)}.clock span{color:var(--mut);font-size:14px}
 .photobar{background:var(--warnbg);color:var(--warn);border-radius:12px;padding:8px 12px;margin-bottom:12px;font-weight:600;text-align:center}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;flex:1;align-content:start}
-.emp{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:16px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-height:150px}
-.emp:active{transform:scale(.98)}
+.emp{background:var(--card);border:2px solid var(--line);border-radius:24px;padding:18px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-height:160px;box-shadow:var(--shadow);transition:transform .1s}
+.emp:active{transform:scale(.97)}
 .emp .av{width:60px;height:60px;font-size:26px}
 .emp b{font-size:19px}.emp small{color:var(--mut);font-size:13px}
-.emp.in{border-color:var(--ok)}
+.emp.in{border-color:var(--ok);background:#f4fbf5}
 .st{font-weight:700;font-size:13px;border-radius:20px;padding:2px 10px;background:var(--chip)}.st.in{background:var(--okbg);color:var(--ok)}
 .kfoot{margin-top:14px;text-align:center}
 /* sheet */
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center;z-index:50}
-.sheet{background:var(--bg);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px 16px 24px}
-@media(min-width:700px){.ov{align-items:center}.sheet{border-radius:20px}}
+.ov{position:fixed;inset:0;background:rgba(80,45,15,.38);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+.sheet{background:var(--bg);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:28px 28px 0 0;padding:20px 18px 26px;box-shadow:0 -6px 30px rgba(80,45,15,.18)}
+@media(min-width:700px){.ov{align-items:center}.sheet{border-radius:28px}}
 .pin{text-align:center}.pin h2{font-size:22px}.pin .sub{margin:2px 0 10px;color:var(--mut)}
 .dots{display:flex;gap:14px;justify-content:center;margin:10px 0}
 .dots i{width:18px;height:18px;border-radius:50%;border:2px solid var(--mut)}.dots i.on{background:var(--pri);border-color:var(--pri)}
 .perr{min-height:22px;color:var(--no);font-weight:600}
 .shake{animation:sh .3s}@keyframes sh{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 .keys{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:320px;margin:6px auto 0}
-.keys button{height:66px;font-size:26px;font-weight:600;border-radius:16px;border:1px solid var(--line);background:var(--card)}
+.keys button{height:68px;font-size:26px;font-weight:600;border-radius:20px;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow)}
+.keys button:active{background:var(--chip)}
 .keys button.ghost{background:transparent;font-size:16px}
-.big{width:100%;min-height:84px;font-size:26px;border-radius:18px;border:0;font-weight:800;color:#fff;margin:10px 0}
+.big{width:100%;min-height:92px;font-size:28px;border-radius:24px;border:0;font-weight:800;color:#fff;margin:10px 0;box-shadow:0 6px 16px rgba(0,0,0,.15)}
+.big:active{transform:scale(.98)}
 .big.ok{background:var(--ok)}.big.no{background:var(--no)}.big:disabled{opacity:.6}
 .done{text-align:center;padding:10px 0}.done .tick{font-size:70px;line-height:1}
 /* mgr */
@@ -66,7 +67,7 @@ h1,h2,h3{margin:0}
 .top h1{font-size:18px}.top small{display:block;color:var(--mut);font-size:12px}
 .pill{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:6px 12px;font-weight:600;font-size:14px;white-space:nowrap}
 .pill.on{background:var(--warnbg);color:var(--warn);border-color:var(--warn)}
-.nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;z-index:30;padding-bottom:env(safe-area-inset-bottom)}
+.nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(120,70,20,.07);display:flex;z-index:30;padding-bottom:env(safe-area-inset-bottom)}
 .nav button{flex:1;border:0;background:none;padding:8px 2px;font-size:12px;color:var(--mut);position:relative}
 .nav button span{display:block;font-size:22px}
 .nav button.on{color:var(--pri);font-weight:700}
@@ -129,7 +130,7 @@ function dm(d) { return d.slice(8, 10) + '/' + d.slice(5, 7); }
 function dur(min) { min = Math.round(min || 0); return Math.floor(min / 60) + 'g' + p2(min % 60); }
 function ago(ms) { var m = Math.floor((now() - ms) / 60000); if (m < 1) return 'vừa xong'; if (m < 60) return m + ' phút trước'; return Math.floor(m / 60) + ' giờ trước'; }
 function addM(m, n) { var p = m.split('-'), d = new Date(Date.UTC(+p[0], +p[1] - 1 + n, 1)); return d.toISOString().slice(0, 7); }
-function color(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360; return 'hsl(' + h + ',55%,42%)'; }
+function color(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360; return 'hsl(' + h + ',70%,50%)'; }
 function av(name, id) { return '<div class="av" style="background:' + color(id || name) + '">' + esc((name || '?').trim().split(/\s+/).pop().charAt(0).toUpperCase()) + '</div>'; }
 function toast(t) { var el = $('#toast'); el.textContent = t; el.style.display = 'block'; clearTimeout(toast.t); toast.t = setTimeout(function () { el.style.display = 'none'; }, 3200); }
 var PAYL = { HOUR: 'Theo giờ', DAY: 'Theo ngày', SHIFT: 'Theo ca', MONTH: 'Theo tháng' };
@@ -234,8 +235,12 @@ ACT.formDel = function () { var o = S.form; ask('Xoá mục này? Không thể h
 /* ---------- đồng hồ + idle ---------- */
 function startClock() {
   clearInterval(S.clockT);
-  function tick() { var a = $('#clk'), b = $('#dt'); if (!a) return; var t = now(); a.textContent = hm(t); b.textContent = wd(ymd(t)) + ', ' + dm(ymd(t)) + '/' + ymd(t).slice(0, 4); }
+  function tick() { var a = $('#clk'), b = $('#dt'); if (!a) return; var t = now(), hi = $('#hi'); if (hi) hi.textContent = greet(); a.textContent = hm(t); b.textContent = wd(ymd(t)) + ', ' + dm(ymd(t)) + '/' + ymd(t).slice(0, 4); }
   tick(); S.clockT = setInterval(tick, 5000);
+}
+function greet() {
+  var h = parseInt(hm(now()).split(':')[0], 10);
+  return (h < 11 ? '☀️ Chào buổi sáng' : h < 14 ? '🌤️ Chào buổi trưa' : h < 18 ? '🌇 Chào buổi chiều' : '🌙 Chào buổi tối') + '! Bấm vào tên của bạn để chấm công';
 }
 function resetIdle() {
   clearTimeout(S.idleT);
@@ -255,7 +260,7 @@ document.addEventListener('touchstart', resetIdle, { passive: true });
  * ===================================================================== */
 function vKiosk() {
   S.view = 'kiosk'; clearInterval(S.pollT); clearInterval(S.kioskT);
-  app.innerHTML = '<div class="kiosk"><div class="khead"><h1>' + esc(S.boot.shopName) + '</h1><div class="clock"><b id="clk"></b><span id="dt"></span></div></div><div id="kbar"></div><div class="grid" id="grid"><div class="muted">Đang tải…</div></div><div class="kfoot"><button class="btn ghost" data-act="mgrLogin">🔒 Quản lý</button></div></div>';
+  app.innerHTML = '<div class="kiosk"><div class="khead"><div><h1>' + esc(S.boot.shopName) + '</h1><div class="hi" id="hi"></div></div><div class="clock"><b id="clk"></b><span id="dt"></span></div></div><div id="kbar"></div><div class="grid" id="grid"><div class="muted">Đang tải…</div></div><div class="kfoot"><button class="btn ghost" data-act="mgrLogin">🔒 Quản lý</button></div></div>';
   startClock(); loadKiosk(); resetIdle();
   S.kioskT = setInterval(function () { if (!$('#sheetHost').firstChild) loadKiosk(true); }, 30000);
 }
@@ -276,8 +281,16 @@ function loadKiosk(quiet) {
 }
 ACT.pick = function (el) {
   var emp = (S.kl.emps.filter(function (e) { return e.id === el.dataset.id; })[0]);
+  if (!S.kl.requirePin) { // tắt PIN: bấm tên → màn xác nhận
+    call('kioskLogin', { deviceToken: S.kioskToken, empId: emp.id }).then(function (r) { S.clockOff = r.serverNow - Date.now(); showAction(r, emp); }).catch(function (e) { toast(e.message); });
+    return;
+  }
   showPin('Xin chào ' + emp.name, 'Nhập PIN 4 số của bạn', function (pin) {
-    return call('kioskLogin', { deviceToken: S.kioskToken, empId: emp.id, pin: pin }).then(function (r) { S.clockOff = r.serverNow - Date.now(); showAction(r, emp); });
+    return call('kioskLogin', { deviceToken: S.kioskToken, empId: emp.id, pin: pin }).then(function (r) {
+      S.clockOff = r.serverNow - Date.now();
+      if (r.requirePhoto) showAction(r, emp); // cần chụp ảnh: phải bấm nút để mở camera
+      else { S.act = r; punch(null); }        // bật PIN: nhập đúng PIN là chấm công luôn
+    });
   });
 };
 function showAction(r, emp) {
@@ -313,7 +326,7 @@ function punch(photo) {
     if (open && d.lateMin) notes.push('Trễ ' + d.lateMin + ' phút so với ca');
     if (!open && d.earlyMin) notes.push('Về sớm ' + d.earlyMin + ' phút');
     if (!open && d.otMin) notes.push('Làm thêm ' + d.otMin + ' phút');
-    openSheet('<div class="done"><div class="tick">✅</div><h2>Đã ' + (open ? 'MỞ CA' : 'CHỐT CA') + ' lúc ' + hm(d.at) + '</h2><p class="muted">Chờ quản lý duyệt. Giờ vẫn được tính từ ' + hm(d.at) + '.</p>' +
+    openSheet('<div class="done"><div class="tick">✅</div><h2>' + esc(S.act.name || '') + '</h2><h2>Đã ' + (open ? 'MỞ CA' : 'CHỐT CA') + ' lúc ' + hm(d.at) + '</h2><p class="muted">Chờ quản lý duyệt. Giờ vẫn được tính từ ' + hm(d.at) + '.</p>' +
       (d.shift ? '<p>' + esc(d.shift) + '</p>' : '') + (notes.length ? '<p><b>' + esc(notes.join(' · ')) + '</b></p>' : '') + '</div>', { sticky: false });
     S.doneT = setTimeout(function () { closeSheet(); loadKiosk(true); }, 3500);
     loadKiosk(true);
@@ -714,6 +727,7 @@ ACT.holEdit = function (el) { holForm(S.holAll.filter(function (x) { return x.da
 /* --- Cài đặt --- */
 var SETF = [
   ['Chung', [['shopName', 'Tên cửa hàng', 'text']]],
+  ['Chấm công', [['requirePin', 'Nhân viên phải nhập PIN (tắt: chỉ cần bấm tên rồi xác nhận)', 'switch']]],
   ['Đi trễ / về sớm', [['lateGrace', 'Cho phép đi trễ (phút) — trễ ít hơn thì không trừ', 'number'], ['earlyGrace', 'Cho phép về sớm (phút)', 'number'], ['lateFine', 'Phạt cố định mỗi lần đi trễ (đ, 0 = không phạt)', 'number'], ['earlyFine', 'Phạt cố định mỗi lần về sớm (đ)', 'number'], ['countEarly', 'Tính cả giờ đến sớm trước ca', 'switch']]],
   ['Tăng ca', [['otEnabled', 'Tính tăng ca', 'switch'], ['otAfter', 'Chỉ tính khi làm quá giờ ca từ (phút)', 'number'], ['otMult', 'Hệ số tăng ca (1.5 = 150%)', 'number']]],
   ['Tính lương', [['stdDays', 'Số ngày công chuẩn / tháng (lương tháng)', 'number'], ['stdHours', 'Số giờ / ngày công', 'number'], ['autoMatchShift', 'Chưa xếp lịch thì tự gán ca gần nhất (±2 giờ)', 'switch'], ['maxShiftHours', 'Ca mở quá bao nhiêu giờ thì coi là quên chốt', 'number']]],
