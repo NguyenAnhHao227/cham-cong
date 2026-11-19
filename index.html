@@ -282,7 +282,7 @@ document.addEventListener('touchstart', resetIdle, { passive: true });
 function vKiosk() {
   S.view = 'kiosk'; clearInterval(S.pollT); clearInterval(S.kioskT);
   app.innerHTML = '<div class="kiosk"><header class="kban"><div class="logo">' + esc(logoCh()) + '</div><div class="ktxt"><h1>' + esc(S.boot.shopName) + '</h1><div class="hi" id="hi"></div></div><div class="clock"><b id="clk"></b><span id="dt"></span></div></header>' +
-    '<div class="kmain"><div id="kbar"></div><div class="grid" id="grid"><div class="muted">Đang tải…</div></div><div class="kfoot"><button class="btn ghost" data-act="mgrLogin">Quản lý</button></div></div></div>';
+    '<div class="kmain"><div id="kbar"></div><div class="grid" id="grid"><div class="muted">Đang tải…</div></div><div class="kfoot"><button class="btn ghost" data-act="mgrLogin">Đăng nhập dưới quyền quản lý</button></div></div></div>';
   startClock(); loadKiosk(); resetIdle();
   S.kioskT = setInterval(function () { if (!$('#sheetHost').firstChild) loadKiosk(true); }, 30000);
 }
