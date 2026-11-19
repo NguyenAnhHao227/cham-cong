@@ -13,15 +13,14 @@
 <title>Chấm công</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap&subset=vietnamese">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap&subset=vietnamese">
 <style>
-/* Bảng màu lấy theo web đặt đồ ăn: nền kem #fff8ee, cam #ea580c, chữ stone, thẻ trắng bo tròn lớn */
-:root{color-scheme:light;--bg:#fff8ee;--card:#fff;--ink:#1c1917;--mut:#78716c;--line:#f7e6c8;--pri:#ea580c;--pri2:#c2410c;--ok:#059669;--no:#dc2626;--warn:#b45309;--chip:#fef3c7;--okbg:#d1fae5;--warnbg:#fef3c7;--nobg:#fee2e2;--shadow:0 1px 2px rgba(120,53,15,.07);--lift:0 12px 28px -14px rgba(124,45,18,.55)}
+/* Bảng màu lấy theo khu nhân viên + Kho của web đặt món: nền xám nhạt, thẻ trắng, xanh dương làm điểm nhấn */
+:root{color-scheme:light;--bg:#f1f5f9;--card:#fff;--ink:#0f172a;--ink2:#334155;--mut:#64748b;--line:#e2e8f0;--pri:#0088ff;--pri2:#0070d6;--ok:#059669;--no:#e11d48;--warn:#b45309;--chip:#eef2f6;--okbg:#e6f7f0;--warnbg:#fff5dc;--nobg:#fff0f3;--shadow:0 1px 2px rgba(15,23,42,.05);--lift:0 8px 20px -10px rgba(0,136,255,.6)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%}
 h1,h2,h3{text-wrap:balance}
-.serif{font-family:"Playfair Display",Georgia,"Times New Roman",serif}
-.logo{width:56px;height:56px;border-radius:18px;background:var(--pri);color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;box-shadow:0 6px 16px -6px rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.25);flex:none}
+.logo{width:56px;height:56px;border-radius:18px;background:var(--pri);color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;flex:none}
 button{font:inherit;color:inherit;cursor:pointer}
 input,select{font:inherit;color:inherit}
 input[type=checkbox]{accent-color:var(--pri)}
@@ -37,37 +36,33 @@ input[type=checkbox]{accent-color:var(--pri)}
 .btn:disabled{opacity:.5}
 .btns{display:flex;gap:8px;margin-top:10px}.btns .btn{flex:1}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.chip{background:var(--chip);color:var(--warn);border-radius:999px;padding:2px 10px;font-size:13px;font-weight:600}
+.chip{background:var(--chip);color:var(--ink2);border-radius:999px;padding:2px 10px;font-size:13px;font-weight:600}
 .chip.ok{background:var(--okbg);color:var(--ok)}.chip.warn{background:var(--warnbg);color:var(--warn)}.chip.no{background:var(--nobg);color:var(--no)}
 .av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;flex:none}
 h1,h2,h3{margin:0}
-/* kiosk: banner đêm lồng đèn như trang chủ web đặt món */
+/* kiosk: thanh đầu trắng như header khu nhân viên */
 .kiosk{min-height:100vh;display:flex;flex-direction:column}
-.kban{position:relative;overflow:hidden;text-align:center;color:#fff;padding:26px 20px 64px;background:linear-gradient(to bottom,#1c1a45 0%,#2d1d40 42%,#4a2433 75%,#6e3322 100%)}
-.kban:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(251,146,60,.28),transparent 65%)}
-.kban>*{position:relative}
-.kban .lan{position:absolute;font-size:30px;filter:drop-shadow(0 0 12px rgba(251,146,60,.9));pointer-events:none}
-.kban .logo{margin:0 auto 10px;width:64px;height:64px;font-size:30px;border-radius:20px}
-.kban h1{font-family:"Playfair Display",Georgia,serif;font-size:32px;line-height:1.15;font-weight:700}
-.gold{height:1px;width:64px;margin:10px auto 0;background:linear-gradient(to right,transparent,#fcd34d,transparent)}
-.hi{margin-top:10px;font-size:14px;font-weight:600;letter-spacing:.02em;color:#fde68a}
-.clock{margin-top:12px}.clock b{font-size:44px;display:block;line-height:1;color:#fff;font-variant-numeric:tabular-nums}.clock span{color:#fde68a;font-size:14px}
-.kwave{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:46px;display:block}
-.kmain{width:100%;max-width:1100px;margin:0 auto;padding:0 16px 22px;flex:1;display:flex;flex-direction:column}
+.kban{background:#fff;border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:12px}
+.kban .logo{width:44px;height:44px;font-size:22px;border-radius:14px}
+.kban .ktxt{min-width:0;flex:1}
+.kban h1{font-size:19px;line-height:1.2;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hi{margin-top:2px;font-size:13px;font-weight:600;color:var(--mut)}
+.clock{text-align:right;flex:none}.clock b{font-size:30px;display:block;line-height:1;color:var(--pri);font-variant-numeric:tabular-nums}.clock span{color:var(--mut);font-size:12px}
+.kmain{width:100%;max-width:1100px;margin:0 auto;padding:16px 16px 110px;flex:1;display:flex;flex-direction:column}
 .photobar{background:var(--warnbg);color:var(--warn);border:1px solid #fde68a;border-radius:16px;padding:10px 12px;margin:0 0 12px;font-weight:700;text-align:center}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;flex:1;align-content:start}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:12px;flex:1;align-content:start}
 .emp{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-height:160px;box-shadow:var(--shadow);transition:transform .1s,box-shadow .1s}
 .emp:active{transform:scale(.97)}
 .emp .av{width:60px;height:60px;font-size:26px}
 .emp b{font-size:19px}.emp small{color:var(--mut);font-size:13px}
-.emp.in{border-color:#6ee7b7;background:#f0fdf9}
-.st{font-weight:700;font-size:13px;border-radius:20px;padding:3px 11px;background:var(--chip);color:var(--warn)}.st.in{background:var(--okbg);color:var(--ok)}
+.emp.in{border-color:#6ee7b7;background:#f3fcf8}
+.st{font-weight:700;font-size:13px;border-radius:20px;padding:3px 11px;background:var(--chip);color:var(--ink2)}.st.in{background:var(--okbg);color:var(--ok)}
 .kfoot{margin-top:16px;text-align:center}
 .kfoot .btn{border-radius:999px;min-height:44px;padding:8px 18px;font-size:14px;color:var(--mut);box-shadow:none}
 /* sheet */
-.ov{position:fixed;inset:0;background:rgba(28,25,23,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50}
-.sheet{background:var(--bg);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:28px 28px 0 0;padding:12px 18px 26px;box-shadow:0 -6px 30px rgba(28,25,23,.25);position:relative}
-.sheet:before{content:"";display:block;width:40px;height:4px;border-radius:4px;background:#e7d9c2;margin:0 auto 14px}
+.ov{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+.sheet{background:var(--bg);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:28px 28px 0 0;padding:12px 18px 26px;box-shadow:0 -6px 30px rgba(15,23,42,.2);position:relative}
+.sheet:before{content:"";display:block;width:40px;height:4px;border-radius:4px;background:#cbd5e1;margin:0 auto 14px}
 @media(min-width:700px){.ov{align-items:center}.sheet{border-radius:28px}}
 .pin{text-align:center}.pin h2{font-size:22px}.pin .sub{margin:2px 0 10px;color:var(--mut)}
 .dots{display:flex;gap:14px;justify-content:center;margin:10px 0}
@@ -78,22 +73,23 @@ h1,h2,h3{margin:0}
 .keys button{height:68px;font-size:26px;font-weight:600;border-radius:20px;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow)}
 .keys button:active{background:var(--chip)}
 .keys button.ghost{background:transparent;font-size:16px}
-.big{width:100%;min-height:92px;font-size:28px;border-radius:24px;border:0;font-weight:800;color:#fff;margin:10px 0;box-shadow:var(--lift)}
+.big{width:100%;min-height:92px;font-size:28px;border-radius:24px;border:0;font-weight:800;color:#fff;margin:10px 0;box-shadow:0 8px 20px -10px rgba(15,23,42,.5)}
 .big:active{transform:scale(.98)}
 .big.ok{background:var(--ok)}.big.no{background:var(--no)}.big:disabled{opacity:.6}
 .done{text-align:center;padding:10px 0}.done .tick{font-size:70px;line-height:1}
 /* mgr */
-.mgr{max-width:900px;margin:0 auto;min-height:100vh;padding:0 14px 90px}
+.mgr{max-width:900px;margin:0 auto;min-height:100vh;padding:0 14px 110px}
 .top{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);margin:0 -14px 12px;padding:10px 14px;display:flex;align-items:center;gap:8px}
 .top .logo{width:38px;height:38px;border-radius:12px;font-size:20px;box-shadow:none}
 .top h1{font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top .pill{padding:7px 10px}.top small{display:block;color:var(--mut);font-size:12px}
-.pill{border:1px solid #fde68a;background:#fff;border-radius:999px;padding:7px 13px;font-weight:700;font-size:13px;white-space:nowrap;box-shadow:var(--shadow)}
+.pill{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font-weight:700;font-size:13px;white-space:nowrap;box-shadow:var(--shadow)}
 .pill.on{background:var(--warnbg);color:var(--warn);border-color:var(--warn)}
-.nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(120,70,20,.07);display:flex;z-index:30;padding-bottom:env(safe-area-inset-bottom)}
-.nav button{flex:1;border:0;background:none;padding:8px 2px;font-size:12px;color:var(--mut);position:relative}
-.nav button span{display:block;font-size:22px}
-.nav button.on{color:var(--pri);font-weight:700}
-.badge{position:absolute;top:2px;left:55%;background:var(--no);color:#fff;border-radius:10px;font-size:11px;min-width:18px;padding:0 5px;font-weight:700}
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:640px;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:30}
+.nav button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;font-size:12px;font-weight:700;color:var(--mut);border-radius:12px;position:relative}
+.nav button svg{display:block}
+.nav button.on{color:var(--pri)}
+.badge{position:absolute;top:0;left:calc(50% + 6px);background:var(--no);color:#fff;font-size:11px;font-weight:800;min-width:19px;height:19px;border-radius:99px;display:grid;place-items:center;padding:0 5px}
+@media(min-width:700px){.nav{max-width:520px;bottom:14px;border:1px solid var(--line);border-radius:22px;box-shadow:0 10px 30px rgba(15,23,42,.14)}.nav button:hover{background:#f1f5f9}}
 .sec{font-weight:700;margin:14px 0 6px}
 .subhead{display:flex;align-items:center;gap:8px;margin:6px 0 10px}.subhead h2{font-size:20px;flex:1}
 .nm{position:sticky;left:0;background:var(--bg);font-weight:600;min-width:74px;max-width:90px;font-size:14px;padding:4px 6px 4px 0;z-index:1}
@@ -263,7 +259,7 @@ function startClock() {
 function logoCh() { var n = String((S.boot && S.boot.shopName) || '').trim(); return n ? n.charAt(0).toUpperCase() : '⏱'; }
 function greet() {
   var h = parseInt(hm(now()).split(':')[0], 10);
-  return (h < 11 ? '☀️ Chào buổi sáng' : h < 14 ? '🌤️ Chào buổi trưa' : h < 18 ? '🌇 Chào buổi chiều' : '🌙 Chào buổi tối') + '! Bấm vào tên của bạn để chấm công';
+  return (h < 11 ? '☀️ Chào buổi sáng' : h < 14 ? '🌤️ Chào buổi trưa' : h < 18 ? '🌇 Chào buổi chiều' : '🌙 Chào buổi tối') + '! Bấm tên của bạn để chấm công';
 }
 function resetIdle() {
   clearTimeout(S.idleT);
@@ -283,9 +279,7 @@ document.addEventListener('touchstart', resetIdle, { passive: true });
  * ===================================================================== */
 function vKiosk() {
   S.view = 'kiosk'; clearInterval(S.pollT); clearInterval(S.kioskT);
-  app.innerHTML = '<div class="kiosk"><header class="kban"><span class="lan" style="top:14px;left:18px">🏮</span><span class="lan" style="top:10px;right:22px;font-size:36px">🏮</span><span class="lan" style="top:78px;right:9%;font-size:22px;opacity:.8">🏮</span><span class="lan" style="top:84px;left:9%;font-size:22px;opacity:.8">🏮</span>' +
-    '<div class="logo">' + esc(logoCh()) + '</div><h1>' + esc(S.boot.shopName) + '</h1><div class="gold"></div><div class="hi" id="hi"></div><div class="clock"><b id="clk"></b><span id="dt"></span></div>' +
-    '<svg class="kwave" viewBox="0 0 448 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0 36 C 90 4, 190 4, 270 28 S 400 54, 448 22 V56 H0 Z" fill="#fff8ee"/></svg></header>' +
+  app.innerHTML = '<div class="kiosk"><header class="kban"><div class="logo">' + esc(logoCh()) + '</div><div class="ktxt"><h1>' + esc(S.boot.shopName) + '</h1><div class="hi" id="hi"></div></div><div class="clock"><b id="clk"></b><span id="dt"></span></div></header>' +
     '<div class="kmain"><div id="kbar"></div><div class="grid" id="grid"><div class="muted">Đang tải…</div></div><div class="kfoot"><button class="btn ghost" data-act="mgrLogin">🔒 Quản lý</button></div></div></div>';
   startClock(); loadKiosk(); resetIdle();
   S.kioskT = setInterval(function () { if (!$('#sheetHost').firstChild) loadKiosk(true); }, 30000);
@@ -367,7 +361,7 @@ ACT.mgrLogin = function () { vLogin(); };
  * ===================================================================== */
 function vLogin() {
   S.view = 'login'; clearInterval(S.kioskT); clearInterval(S.pollT); closeSheet();
-  app.innerHTML = '<div class="login"><div class="logo" style="margin:0 auto 12px;width:68px;height:68px;font-size:32px;border-radius:22px">' + esc(logoCh()) + '</div><h1 class="serif" style="font-size:28px">' + esc(S.boot.shopName) + '</h1><div class="gold" style="background:linear-gradient(to right,transparent,#f59e0b,transparent);margin-bottom:8px"></div><p class="muted">Đăng nhập quản lý</p>' +
+  app.innerHTML = '<div class="login"><div class="logo" style="margin:0 auto 12px;width:68px;height:68px;font-size:32px;border-radius:22px">' + esc(logoCh()) + '</div><h1 style="font-size:24px;font-weight:800">' + esc(S.boot.shopName) + '</h1><p class="muted">Đăng nhập quản lý</p>' +
     (S.boot.managers.length ? S.boot.managers.map(function (m) { return '<button class="btn" data-act="mpick" data-id="' + esc(m.id) + '">' + av(m.name, m.id) + '<div><b>' + esc(m.name) + '</b><div class="muted">' + (m.role === 'CHU' ? 'Chủ' : 'Quản lý') + '</div></div></button>'; }).join('') : '<p>Chưa có tài khoản quản lý. Chạy hàm setup() trong Apps Script.</p>') +
     (S.boot.isKiosk ? '<button class="btn ghost" style="justify-content:center" data-act="toKiosk">← Về màn hình chấm công</button>' :
       '<p class="muted" style="font-size:13px;margin-top:18px">Bạn là nhân viên? Màn hình chấm công chỉ hiện trên <b>iPad ở quầy</b> (máy đã đăng ký). Hãy dùng iPad đó, hoặc nhờ quản lý đăng ký máy này: đăng nhập quản lý → Thêm → Cài đặt.</p>') + '</div>';
@@ -393,14 +387,21 @@ ACT.logout = function () { doLogout(); };
 /* =====================================================================
  *  GIAO DIỆN QUẢN LÝ
  * ===================================================================== */
-var TABS = [['approve', '✅', 'Duyệt'], ['today', '👥', 'Hôm nay'], ['sched', '📅', 'Lịch'], ['report', '📊', 'Báo cáo'], ['more', '☰', 'Thêm']];
+function ic(p) { return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + '</svg>'; }
+var TABS = [
+  ['approve', ic('<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>'), 'Duyệt'],
+  ['today', ic('<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>'), 'Hôm nay'],
+  ['sched', ic('<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/>'), 'Lịch'],
+  ['report', ic('<line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/>'), 'Báo cáo'],
+  ['more', ic('<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>'), 'Thêm']
+];
 function vMgr() {
   S.view = 'mgr'; clearInterval(S.kioskT);
   if (!S.user) { try { S.user = JSON.parse(ssGet('usr')); } catch (e) {} }
   S.month = ymd(now()).slice(0, 7);
-  app.innerHTML = '<div class="mgr"><div class="top"><div class="logo">' + esc(logoCh()) + '</div><div class="grow"><h1 class="serif">' + esc(S.boot.shopName) + '</h1><small>' + esc(S.user ? S.user.name : '') + '</small></div>' +
+  app.innerHTML = '<div class="mgr"><div class="top"><div class="logo">' + esc(logoCh()) + '</div><div class="grow"><h1>' + esc(S.boot.shopName) + '</h1><small>' + esc(S.user ? S.user.name : '') + '</small></div>' +
     '<button class="pill" id="photoPill" data-act="togglePhoto"></button><button class="pill" data-act="logout">Thoát</button></div><div id="body"></div>' +
-    '<div class="nav">' + TABS.map(function (t) { return '<button data-act="tab" data-t="' + t[0] + '" id="tab_' + t[0] + '"><span>' + t[1] + '</span>' + t[2] + (t[0] === 'approve' ? '<b class="badge" id="bdg" style="display:none"></b>' : '') + '</button>'; }).join('') + '</div></div>';
+    '<div class="nav">' + TABS.map(function (t) { return '<button data-act="tab" data-t="' + t[0] + '" id="tab_' + t[0] + '">' + t[1] + '<span>' + t[2] + '</span>' + (t[0] === 'approve' ? '<b class="badge" id="bdg" style="display:none"></b>' : '') + '</button>'; }).join('') + '</div></div>';
   paintPhotoPill(S.boot.requirePhoto);
   setTab(S.tab || 'approve');
   clearInterval(S.pollT); S.pollT = setInterval(poll, 15000);
