@@ -330,9 +330,11 @@ function vLogin() {
   S.view = 'login'; clearInterval(S.kioskT); clearInterval(S.pollT); closeSheet();
   app.innerHTML = '<div class="login"><h1>' + esc(S.boot.shopName) + '</h1><p class="muted">Đăng nhập quản lý</p>' +
     (S.boot.managers.length ? S.boot.managers.map(function (m) { return '<button class="btn" data-act="mpick" data-id="' + esc(m.id) + '">' + av(m.name, m.id) + '<div><b>' + esc(m.name) + '</b><div class="muted">' + (m.role === 'CHU' ? 'Chủ' : 'Quản lý') + '</div></div></button>'; }).join('') : '<p>Chưa có tài khoản quản lý. Chạy hàm setup() trong Apps Script.</p>') +
-    (S.boot.isKiosk ? '<button class="btn ghost" style="justify-content:center" data-act="toKiosk">← Về màn hình chấm công</button>' : '') + '</div>';
+    (S.boot.isKiosk ? '<button class="btn ghost" style="justify-content:center" data-act="toKiosk">← Về màn hình chấm công</button>' :
+      '<p class="muted" style="font-size:13px;margin-top:18px">Bạn là nhân viên? Màn hình chấm công chỉ hiện trên <b>iPad ở quầy</b> (máy đã đăng ký). Hãy dùng iPad đó, hoặc nhờ quản lý đăng ký máy này: đăng nhập quản lý → Thêm → Cài đặt.</p>') + '</div>';
 }
 ACT.toKiosk = function () { vKiosk(); };
+ACT.toKioskNow = function () { closeSheet(); doLogout(); };
 ACT.mpick = function (el) {
   var m = S.boot.managers.filter(function (x) { return x.id === el.dataset.id; })[0];
   showPin(m.name, 'Nhập PIN quản lý', function (pin) {
@@ -402,6 +404,7 @@ function tApprove(quiet) {
   return guard(my, api('pending')).then(function (d) {
     if (!d) return; S.clockOff = d.serverNow - Date.now(); S.pend = d.items.length; S.pendItems = d.items; badge();
     var h = '';
+    if (!S.boot.isKiosk && !S.boot.kioskCount) h += '<div class="card" style="border:1px solid var(--warn,#e0a000)"><b>⚠ Chưa có máy chấm công</b><div class="muted" style="margin:4px 0 10px">Nhân viên chưa có trang để mở ca / chốt ca. Bấm nút dưới đây trên iPad ở quầy (hoặc máy này) để tạo.</div><button class="btn pri" style="width:100%" data-act="regKiosk" data-from="banner">Dùng thiết bị này làm MÁY CHẤM CÔNG</button></div>';
     if (d.items.length) h += '<div class="row" style="margin-bottom:8px"><b class="grow">' + d.items.length + ' yêu cầu chờ duyệt</b><button class="btn ok" data-act="approveAll">Duyệt tất cả</button></div>';
     else h += '<div class="card c"><div style="font-size:42px">🎉</div><b>Không có yêu cầu nào chờ duyệt</b></div>';
     h += d.items.map(function (it) {
@@ -735,14 +738,15 @@ ACT.saveSettings = function (el) {
   el.disabled = true;
   api('settingsSet', { values: v }).then(function (r) { el.disabled = false; S.boot.shopName = r.settings.shopName; paintPhotoPill(r.settings.requirePhoto); toast('Đã lưu cài đặt'); }).catch(function (e) { el.disabled = false; toast(e.message); });
 };
-ACT.regKiosk = function () {
+ACT.regKiosk = function (el) {
+  var fromBanner = el && el.dataset && el.dataset.from === 'banner';
   api('registerKiosk').then(function (r) {
-    S.kioskToken = r.deviceToken; lsSet('kioskToken', r.deviceToken); S.boot.isKiosk = true;
+    S.kioskToken = r.deviceToken; lsSet('kioskToken', r.deviceToken); S.boot.isKiosk = true; S.boot.kioskCount = (S.boot.kioskCount || 0) + 1;
     if (API_URL) r.url = location.href.split('?')[0].split('#')[0] + '?k=' + r.deviceToken; // bản độc lập: link nằm trên chính trang này
     openSheet('<h3>✅ Đã đăng ký máy chấm công</h3><p>Thiết bị này giờ sẽ mở thẳng màn hình chấm công. Bấm "Thoát" để về màn hình nhân viên.</p>' +
       (r.url ? '<p class="muted">Muốn dùng iPad khác (hoặc iPad xoá dữ liệu trình duyệt): mở link riêng này trên iPad đó rồi "Thêm vào Màn hình chính". Link này là chìa khoá — đừng gửi cho nhân viên.</p><input readonly value="' + esc(r.url) + '" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)" onclick="this.select()">' : '') +
-      '<div class="btns"><button class="btn pri" data-act="sheetClose">Xong</button></div>', { sticky: true });
-    openSub('settings');
+      '<div class="btns"><button class="btn pri" data-act="' + (fromBanner ? 'toKioskNow' : 'sheetClose') + '">' + (fromBanner ? 'Mở màn hình nhân viên' : 'Xong') + '</button></div>', { sticky: true });
+    if (!fromBanner) openSub('settings');
   }).catch(function (e) { toast(e.message); });
 };
 ACT.unregKiosk = function () {
