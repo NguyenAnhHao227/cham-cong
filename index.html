@@ -36,6 +36,8 @@ input[type=checkbox]{accent-color:var(--pri)}
 .btn:disabled{opacity:.5}
 .btns{display:flex;gap:8px;margin-top:10px}.btns .btn{flex:1}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.chips:empty{display:none}
+.erow{display:flex;align-items:center;gap:10px;padding:14px 12px}.erow .etxt{flex:1;min-width:0}.erow .etxt .chips{margin-top:6px;gap:4px}.erow .chip{font-size:12px;padding:2px 8px;white-space:nowrap}.erow .btn{flex:none;padding:12px 14px}
+@media(min-width:420px){.erow{gap:12px;padding:14px 15px}.erow .btn{padding:12px 18px}.erow .chip{font-size:13px;padding:2px 10px}}
 .chip{background:var(--chip);color:var(--ink2);border-radius:999px;padding:2px 10px;font-size:13px;font-weight:600}
 .chip.ok{background:var(--okbg);color:var(--ok)}.chip.warn{background:var(--warnbg);color:var(--warn)}.chip.no{background:var(--nobg);color:var(--no)}
 .av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;flex:none}
@@ -93,7 +95,7 @@ h1,h2,h3{margin:0}
 #body{max-width:900px;margin:0 auto;padding:0 14px}
 .top{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);margin:0 0 12px;min-height:64px;padding:0 max(14px,calc((100% - 900px)/2 + 14px));display:flex;align-items:center;gap:8px}
 .top .logo{width:38px;height:38px;border-radius:12px;font-size:20px;box-shadow:none}
-.top h1{font-size:17px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top .pill{padding:0 12px;height:36px;display:inline-flex;align-items:center}.top small{display:block;color:var(--mut);font-size:12px;line-height:1.3}
+.top h1{font-size:17px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top .pill{padding:0 10px;height:36px;display:inline-flex;align-items:center}.top small{display:block;color:var(--mut);font-size:12px;line-height:1.3}
 .pill{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font-weight:700;font-size:13px;white-space:nowrap;box-shadow:var(--shadow)}
 .pill.on{background:var(--warnbg);color:var(--warn);border-color:var(--warn)}
 .nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:640px;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:30}
@@ -513,7 +515,7 @@ function tToday() {
       if (e.state === 'IN') chips += '<span class="chip ok">Từ ' + hm(e.since) + '</span>' + (e.openStatus === 'CHO' ? '<span class="chip warn">⏳ chờ duyệt</span>' : '');
       if (e.state === 'ABSENT') chips += '<span class="chip no">Trễ ' + e.lateMin + ' phút</span>';
       e.shifts.forEach(function (x) { chips += '<span class="chip">' + esc(x) + '</span>'; });
-      return '<div class="card"><div class="row">' + av(e.name, e.id) + '<div class="grow"><b>' + esc(e.name) + '</b><div class="muted">' + s[0] + '</div></div><button class="btn ' + (e.state === 'IN' ? '' : 'pri') + '" data-act="punchFor" data-id="' + esc(e.id) + '">' + (e.state === 'IN' ? 'Chốt ca hộ' : 'Mở ca hộ') + '</button></div><div class="chips">' + chips + '</div></div>';
+      return '<div class="card erow">' + av(e.name, e.id) + '<div class="etxt"><b>' + esc(e.name) + '</b><div class="muted">' + s[0] + '</div>' + (chips ? '<div class="chips">' + chips + '</div>' : '') + '</div><button class="btn ' + (e.state === 'IN' ? '' : 'pri') + '" data-act="punchFor" data-id="' + esc(e.id) + '">' + (e.state === 'IN' ? 'Chốt ca hộ' : 'Mở ca hộ') + '</button></div>';
     }).join('') || '<div class="card c muted">Chưa có nhân viên chấm công.</div>';
     body(h);
   }).catch(fail);
