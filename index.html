@@ -226,7 +226,7 @@ ACT.sheetClose = function () { closeSheet(); };
 function showPin(title, sub, onDone) {
   var k = '';
   for (var n = 1; n <= 9; n++) k += '<button data-act="key" data-k="' + n + '">' + n + '</button>';
-  openSheet('<div class="pin"><h2>' + esc(title) + '</h2><p class="sub">' + esc(sub || '') + '</p><div class="dots" id="dots"><i></i><i></i><i></i><i></i></div><div class="perr" id="perr"></div><div class="keys">' + k +
+  openSheet('<div class="pin"><h2>' + esc(title) + '</h2>' + (sub ? '<p class="sub">' + esc(sub) + '</p>' : '') + '<div class="dots" id="dots"><i></i><i></i><i></i><i></i></div><div class="perr" id="perr"></div><div class="keys">' + k +
     '<button class="ghost" data-act="sheetClose">Huỷ</button><button data-act="key" data-k="0">0</button><button class="ghost" data-act="key" data-k="x">⌫</button></div></div>', { cls: 'pinsheet' });
   S.pinState = { val: '', busy: false, onDone: onDone };
 }
@@ -336,7 +336,7 @@ ACT.pick = function (el) {
     call('kioskLogin', { deviceToken: S.kioskToken, empId: emp.id }).then(function (r) { S.clockOff = r.serverNow - Date.now(); showAction(r, emp); }).catch(function (e) { toast(e.message); });
     return;
   }
-  showPin('Xin chào ' + emp.name, 'Nhập PIN 4 số của bạn', function (pin) {
+  showPin('Xin chào ' + emp.name, '', function (pin) {
     return call('kioskLogin', { deviceToken: S.kioskToken, empId: emp.id, pin: pin }).then(function (r) {
       S.clockOff = r.serverNow - Date.now();
       if (r.requirePhoto) showAction(r, emp); // cần chụp ảnh: phải bấm nút để mở camera
@@ -348,9 +348,8 @@ function showAction(r, emp) {
   var isIn = r.state === 'IN', up = '';
   if (r.upcoming.length) up = '<div class="sec">Lịch làm sắp tới</div>' + r.upcoming.map(function (u) { return '<div class="muted">' + wd(u.date) + ' ' + dm(u.date) + ' — ' + esc(u.shift) + '</div>'; }).join('');
   openSheet('<div class="c">' + '<div class="row" style="justify-content:center">' + av(emp.name, emp.id) + '<h2>' + esc(r.name) + '</h2></div>' +
-    '<p class="muted">' + (isIn ? 'Bạn đang làm từ ' + hm(r.since) : 'Bạn chưa vào ca') + '</p>' +
+    (isIn ? '<p class="muted">Bạn đang làm từ ' + hm(r.since) + '</p>' : '') +
     '<button class="big ' + (isIn ? 'no' : 'ok') + '" id="goBtn" data-act="go">' + (r.requirePhoto ? '📷 ' : '') + (isIn ? 'CHỐT CA' : 'MỞ CA') + '</button>' +
-    (r.requirePhoto ? '<p class="muted">Bấm nút rồi chụp ảnh khuôn mặt để gửi.</p>' : '') +
     '<input type="file" id="cam" accept="image/*" capture="user" style="display:none">' +
     '<button class="btn ghost" data-act="sheetClose" style="width:100%">Quay lại</button></div><div style="text-align:left">' + up + '</div>', { sticky: true });
   S.act = r;
@@ -377,7 +376,7 @@ function punch(photo) {
     if (open && d.lateMin) notes.push('Trễ ' + d.lateMin + ' phút so với ca');
     if (!open && d.earlyMin) notes.push('Về sớm ' + d.earlyMin + ' phút');
     if (!open && d.otMin) notes.push('Làm thêm ' + d.otMin + ' phút');
-    openSheet('<div class="done"><div class="tick">✅</div><h2>' + esc(S.act.name || '') + '</h2><h2>Đã ' + (open ? 'MỞ CA' : 'CHỐT CA') + ' lúc ' + hm(d.at) + '</h2><p class="muted">Chờ quản lý duyệt. Giờ vẫn được tính từ ' + hm(d.at) + '.</p>' +
+    openSheet('<div class="done"><div class="tick">✅</div><h2>' + esc(S.act.name || '') + '</h2><h2>Đã ' + (open ? 'MỞ CA' : 'CHỐT CA') + ' lúc ' + hm(d.at) + '</h2><p class="muted">Chờ quản lý duyệt</p>' +
       (d.shift ? '<p>' + esc(d.shift) + '</p>' : '') + (notes.length ? '<p><b>' + esc(notes.join(' · ')) + '</b></p>' : '') + '</div>', { sticky: false });
     S.doneT = setTimeout(function () { closeSheet(); loadKiosk(true); }, ((S.kl && S.kl.doneSec > 0 ? S.kl.doneSec : 4) * 1000));
     loadKiosk(true);
@@ -401,7 +400,7 @@ ACT.toKiosk = function () { vKiosk(); };
 ACT.toKioskNow = function () { closeSheet(); doLogout(); };
 ACT.mpick = function (el) {
   var m = S.boot.managers.filter(function (x) { return x.id === el.dataset.id; })[0];
-  showPin(m.name, 'Nhập PIN quản lý', function (pin) {
+  showPin(m.name, '', function (pin) {
     return call('login', { empId: m.id, pin: pin }).then(function (r) {
       S.token = r.token; S.user = r.user; ssSet('tok', r.token); ssSet('usr', JSON.stringify(r.user)); closeSheet(); vMgr();
       if (r.weakPin) setTimeout(function () { toast('PIN hiện là 1234 (mặc định). Hãy đổi PIN: Thêm → Cài đặt.'); }, 600);
@@ -488,7 +487,7 @@ function tApprove(quiet) {
         '<div class="btns"><button class="btn ok" data-act="decide" data-rec="' + esc(it.recId) + '" data-which="' + it.which + '" data-dec="DUYET">✔ Duyệt</button><button class="btn" data-act="decide" data-rec="' + esc(it.recId) + '" data-which="' + it.which + '" data-dec="TUCHOI">✖ Từ chối</button></div></div>';
     }).join('');
     if (d.forgot.length) h += '<div class="sec">⚠ Quên chốt ca (mở quá lâu)</div>' + d.forgot.map(function (f) {
-      return '<button class="card" data-act="recEdit" data-id="' + esc(f.recId) + '"><b>' + esc(f.name) + '</b> — mở ca ' + dm(f.date) + ' ' + hm(f.openAt) + '<div class="muted">Bấm để nhập giờ chốt ca</div></button>';
+      return '<button class="card" data-act="recEdit" data-id="' + esc(f.recId) + '"><div class="row"><div class="grow"><b>' + esc(f.name) + '</b> — mở ca ' + dm(f.date) + ' ' + hm(f.openAt) + '</div><span class="go">✎</span></div></button>';
     }).join('');
     body(h); loadPhotos();
   }).catch(fail);
@@ -520,13 +519,12 @@ function tToday() {
     if (!d) return; S.clockOff = d.serverNow - Date.now(); S.today = d;
     var inN = d.emps.filter(function (e) { return e.state === 'IN'; }).length, ab = d.emps.filter(function (e) { return e.state === 'ABSENT'; }).length;
     var h = '<div class="stat"><div class="card grow s-ok"><b>' + inN + '</b><span class="muted">Đang làm</span></div><div class="card grow s-no"><b>' + ab + '</b><span class="muted">Chưa đến</span></div><div class="card grow s-warn"><b>' + d.pending + '</b><span class="muted">Chờ duyệt</span></div></div>';
-    h += '<div class="card" style="background:var(--warnbg)"><b>📷 Chụp ảnh: ' + (d.requirePhoto ? 'ĐANG BẬT' : 'đang tắt') + '</b><div class="muted">Bật khi bạn không ở quán, tắt khi bạn có mặt (nút ở góc trên).</div></div>';
     h += d.emps.map(function (e) {
       var s = STL[e.state], chips = '';
-      if (e.state === 'IN') chips += '<span class="chip ok">Từ ' + hm(e.since) + '</span>' + (e.openStatus === 'CHO' ? '<span class="chip warn">⏳ chờ duyệt</span>' : '');
-      if (e.state === 'ABSENT') chips += '<span class="chip no">Trễ ' + e.lateMin + ' phút</span>';
+      chips += '<span class="chip ' + s[1] + '">' + s[0] + (e.state === 'IN' ? ' từ ' + hm(e.since) : e.state === 'ABSENT' ? ' · trễ ' + e.lateMin + ' phút' : '') + '</span>';
+      if (e.state === 'IN' && e.openStatus === 'CHO') chips += '<span class="chip warn">⏳ chờ duyệt</span>';
       e.shifts.forEach(function (x) { chips += '<span class="chip">' + esc(x) + '</span>'; });
-      return '<div class="card erow">' + av(e.name, e.id) + '<div class="etxt"><b>' + esc(e.name) + '</b><div class="muted">' + s[0] + '</div>' + (chips ? '<div class="chips">' + chips + '</div>' : '') + '</div><button class="btn ' + (e.state === 'IN' ? '' : 'pri') + '" data-act="punchFor" data-id="' + esc(e.id) + '">' + (e.state === 'IN' ? 'Chốt ca hộ' : 'Mở ca hộ') + '</button></div>';
+      return '<div class="card erow">' + av(e.name, e.id) + '<div class="etxt"><b>' + esc(e.name) + '</b>' + (chips ? '<div class="chips">' + chips + '</div>' : '') + '</div><button class="btn ' + (e.state === 'IN' ? '' : 'pri') + '" data-act="punchFor" data-id="' + esc(e.id) + '">' + (e.state === 'IN' ? 'Chốt ca hộ' : 'Mở ca hộ') + '</button></div>';
     }).join('') || '<div class="card c muted">Chưa có nhân viên chấm công.</div>';
     body(h);
   }).catch(fail);
@@ -563,7 +561,7 @@ function drawSched() {
     var seenE = {}, n = 0; d.rows.forEach(function (r) { if (r.date === x && shiftOf[r.shiftId] && !seenE[r.empId]) { seenE[r.empId] = 1; n++; } });
     return '<button class="dchip' + (x === S.day ? ' on' : '') + (x === today ? ' today' : '') + '" data-act="day" data-d="' + x + '"><span>' + wd(x) + '</span><b>' + x.slice(8) + '</b><i>' + (n ? n + ' người' : '—') + '</i></button>';
   }).join('') + '</div>';
-  h += '<div class="dtitle"><b>' + wd(S.day) + ', ' + dm(S.day) + '</b>' + (S.day === today ? ' <span class="chip ok">Hôm nay</span>' : '') + (hol[S.day] ? ' <span class="chip warn">🎉 ' + esc(hol[S.day]) + '</span>' : '') + '</div>';
+  if (S.day === today || hol[S.day]) h += '<div class="dtitle">' + (S.day === today ? '<span class="chip ok">Hôm nay</span>' : '') + (hol[S.day] ? ' <span class="chip warn">🎉 ' + esc(hol[S.day]) + '</span>' : '') + '</div>';
   if (!d.shifts.length) h += '<div class="card">Chưa có ca nào. Vào Thêm → Ca làm để tạo ca (ví dụ Ca sáng 08:00–12:00).</div>';
   else if (!d.emps.length) h += '<div class="card c muted">Chưa có nhân viên cần xếp ca.</div>';
   h += d.emps.map(function (e) {
@@ -573,9 +571,9 @@ function drawSched() {
     var opts = d.shifts.map(function (x) {
       return '<button class="opt' + (onIds[x.id] ? ' on' : '') + '" data-act="pickSh" data-emp="' + esc(e.id) + '" data-sh="' + esc(x.id) + '"><b>' + esc(x.name) + '</b><small>' + x.start + '–' + x.end + '</small></button>';
     }).join('') + '<button class="opt off' + (cur.length ? '' : ' on') + '" data-act="pickSh" data-emp="' + esc(e.id) + '" data-sh=""><b>Nghỉ</b><small>&nbsp;</small></button>';
-    return '<div class="card"><div class="row">' + av(e.name, e.id) + '<div class="grow"><b>' + esc(e.name) + '</b><div class="muted">' + (cur.length ? cur.map(function (c) { return esc(c.name) + ' ' + c.start + '–' + c.end; }).join(' + ') : 'Chưa xếp ca / nghỉ') + '</div></div></div><div class="opts">' + opts + '</div></div>';
+    return '<div class="card"><div class="row">' + av(e.name, e.id) + '<div class="grow"><b>' + esc(e.name) + '</b></div></div><div class="opts">' + opts + '</div></div>';
   }).join('');
-  h += '<div class="btns"><button class="btn" data-act="wkCopy">📋 Sao chép lịch từ tuần trước</button></div><p class="muted">Bấm vào một ngày ở trên, rồi bấm ca cho từng người. Ca được chọn có nền xanh; bấm thêm ca khác để làm nhiều ca trong ngày, bấm lại ca đã chọn để bỏ. "Nghỉ" xoá hết ca của ngày đó.</p>';
+  h += '<div class="btns"><button class="btn" data-act="wkCopy">📋 Sao chép lịch từ tuần trước</button></div>';
   body(h);
 }
 ACT.wkPrev = function () { tSched(addD(S.ws, -7), S.sch.days.indexOf(S.day)); };
@@ -710,7 +708,7 @@ function sEmps(my) {
   subShell('Nhân viên', '<button class="btn pri" data-act="empNew">＋ Thêm</button>', '<div class="muted c">Đang tải…</div>');
   api('empList').then(function (d) {
     if (my !== S.seq) return; S.empAll = d.emps;
-    subShell('Nhân viên', '<button class="btn pri" data-act="empNew">＋ Thêm</button>', '<div class="subtip">Bấm vào một người để sửa tên, lương, PIN hoặc xoá.</div>' + d.emps.map(function (e) {
+    subShell('Nhân viên', '<button class="btn pri" data-act="empNew">＋ Thêm</button>', d.emps.map(function (e) {
       return '<button class="card" style="' + (e.active ? '' : 'opacity:.5') + '" data-act="empEdit" data-id="' + esc(e.id) + '"><div class="row">' + av(e.name, e.id) + '<div class="grow"><b>' + esc(e.name) + '</b><div class="muted">' + (e.role === 'CHU' ? 'Chủ' : e.role === 'QL' ? 'Quản lý' : 'Nhân viên') + (e.active ? '' : ' · đã nghỉ') + (e.track ? '' : ' · không chấm công') + '</div></div><div class="money">' + (e.rate ? money(e.rate) + '<small class="muted">' + PAYU[e.payType] + '</small>' : '') + '</div><span class="go">✎</span></div></button>';
     }).join(''));
   }).catch(fail);
@@ -739,7 +737,7 @@ function sShifts(my) {
   subShell('Ca làm', '<button class="btn pri" data-act="shNew">＋ Thêm</button>', '<div class="muted c">Đang tải…</div>');
   api('shiftList').then(function (d) {
     if (my !== S.seq) return; S.shAll = d.shifts;
-    subShell('Ca làm', '<button class="btn pri" data-act="shNew">＋ Thêm</button>', '<div class="subtip">Bấm vào một ca để sửa giờ, hệ số, phụ cấp hoặc xoá.</div>' + d.shifts.map(function (s) {
+    subShell('Ca làm', '<button class="btn pri" data-act="shNew">＋ Thêm</button>', d.shifts.map(function (s) {
       return '<button class="card" style="' + (s.active ? '' : 'opacity:.5') + '" data-act="shEdit" data-id="' + esc(s.id) + '"><div class="row"><div class="grow"><b>' + esc(s.name) + '</b><div class="muted">' + s.start + ' – ' + s.end + (s.breakMin ? ' · nghỉ ' + s.breakMin + 'p' : '') + '</div></div><div class="chips" style="margin:0">' + (s.mult !== 1 ? '<span class="chip ok">Hệ số x' + s.mult + '</span>' : '') + (s.allowance ? '<span class="chip">PC ' + money(s.allowance) + '</span>' : '') + (s.active ? '' : '<span class="chip">Đã tắt</span>') + '</div><span class="go">✎</span></div></button>';
     }).join(''));
   }).catch(fail);
