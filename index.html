@@ -54,26 +54,51 @@ h1,h2,h3{margin:0}
 .kban h1{font-size:19px;line-height:1.2;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hi{margin-top:2px;font-size:13px;font-weight:600;color:var(--mut)}
 .clock{text-align:right;flex:none}.clock b{font-size:30px;display:block;line-height:1;color:var(--pri);font-variant-numeric:tabular-nums}.clock span{color:var(--mut);font-size:12px}
-.kmain{width:100%;max-width:1100px;margin:0 auto;padding:16px 16px 110px;flex:1;display:flex;flex-direction:column}
-.photobar{background:var(--warnbg);color:var(--warn);border:1px solid #fde68a;border-radius:16px;padding:10px 12px;margin:0 0 12px;font-weight:700;text-align:center}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;flex:1;align-content:start}
-@media(min-width:700px){.grid{grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
-.emp{width:100%;max-width:340px;justify-self:center}}
+.kmain{width:100%;max-width:1100px;margin:0 auto;padding:16px 16px 28px;flex:1;display:flex;flex-direction:column;gap:14px}
+.kgrid{display:grid;grid-template-columns:1fr;gap:14px;align-content:start;flex:1}
+@media(min-width:760px) and (orientation:landscape){.kgrid{grid-template-columns:1.05fr 1fr;align-items:stretch}}
+.qrcard{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center}
+#qrBox{width:min(100%,520px,58vh);aspect-ratio:1;display:flex;align-items:center;justify-content:center}
+#qrBox svg{display:block;width:100%;height:100%;border-radius:12px}
+.qrbar{width:min(100%,520px,58vh);height:8px;border-radius:99px;background:var(--chip);overflow:hidden}.qrbar i{display:block;height:100%;width:100%;background:var(--pri)}
+.qrtip{margin:0;color:var(--mut);font-size:14px}
 @media(min-width:1000px){
 .kban{padding-top:16px;padding-bottom:16px;gap:16px}
 .kban .logo{width:56px;height:56px;font-size:28px;border-radius:18px}
 .kban h1{font-size:26px}.hi{font-size:15px}
 .clock b{font-size:42px}.clock span{font-size:14px}
-.grid{grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
-.emp{min-height:200px;padding:24px 14px}.emp .av{width:76px;height:76px;font-size:32px}.emp b{font-size:22px}.emp small{font-size:14px}.st{font-size:14px}
+.step b{font-size:19px}.step .d{font-size:16px}.steps h2{font-size:22px}.sn{width:52px;height:52px;font-size:26px}.step:not(:last-child):before{left:25px;top:52px}
 }
-.emp{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-height:160px;box-shadow:var(--shadow);transition:transform .1s,box-shadow .1s}
-.emp:active{transform:scale(.97)}
-.emp .av{width:60px;height:60px;font-size:26px}
-.emp b{font-size:19px}.emp small{color:var(--mut);font-size:13px}
-.emp.in{border-color:#6ee7b7;background:#f3fcf8}
-.st{font-weight:700;font-size:13px;border-radius:20px;padding:3px 11px;background:var(--chip);color:var(--ink2)}.st.in{background:var(--okbg);color:var(--ok)}
-.kfoot{margin-top:16px;text-align:center}
+/* hướng dẫn dạng infographic */
+.steps{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:16px 18px;box-shadow:var(--shadow);text-align:left;display:flex;flex-direction:column;justify-content:center;margin:0 0 14px}
+.kgrid .steps{margin:0}
+.steps h2{font-size:18px;margin-bottom:12px}
+.step{display:flex;gap:14px;position:relative;padding-bottom:16px;align-items:flex-start}.step:last-child{padding-bottom:0}
+.step:not(:last-child):before{content:"";position:absolute;left:21px;top:44px;bottom:2px;width:2px;background:var(--line)}
+.sn{width:44px;height:44px;border-radius:50%;background:var(--pri);color:#fff;display:grid;place-items:center;font-size:22px;flex:none;box-shadow:var(--lift)}
+.step b{display:block;font-size:16px;line-height:1.3}.step .d{display:block;color:var(--mut);font-size:14px}
+.staffcta{background:linear-gradient(180deg,#1aa0ff,#0070d6);color:#fff;border-radius:24px;padding:18px;text-align:center;box-shadow:var(--lift);margin:0 0 14px}
+.staffcta h2{font-size:22px}.staffcta p{margin:4px 0 14px;opacity:.92}
+.staffcta .btn{background:#fff;color:var(--pri2);border-color:#fff;width:100%;font-size:18px;font-weight:800;min-height:56px;box-shadow:none}
+/* màn hình nhân viên + quét */
+.shome{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;text-align:center;gap:14px}
+.hello{font-size:20px;font-weight:700}
+.punchbtn{width:min(300px,78vw,60vh);aspect-ratio:1;border-radius:50%;border:0;background:linear-gradient(180deg,#1aa0ff,#0070d6);color:#fff;font-size:34px;font-weight:800;box-shadow:0 22px 40px -18px rgba(0,136,255,.9)}
+.punchbtn:active{transform:scale(.97)}
+.scan{position:fixed;inset:0;background:#000;z-index:60}
+.scan video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.scan .top2{position:absolute;left:0;right:0;top:0;padding:14px 16px;display:flex;gap:10px;align-items:center}
+.scan .frame{position:absolute;left:50%;top:50%;width:min(62vw,62vh,340px);aspect-ratio:1;transform:translate(-50%,-50%);border:3px solid #fff;border-radius:24px;box-shadow:0 0 0 100vmax rgba(0,0,0,.45);pointer-events:none}
+.scan .msg{position:absolute;left:16px;right:16px;bottom:22px;color:#fff;text-align:center;font-weight:600;text-shadow:0 1px 4px #000;z-index:2}
+.scan .msg .btn{color:var(--ink)}
+/* hộp lưu ý khi tin tưởng máy */
+.notes{margin:8px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.notes li{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:14px;line-height:1.35}
+.notes .ni{font-size:22px;line-height:1.2;flex:none}
+.ack{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:18px;padding:12px 14px;font-weight:700;margin:12px 0 2px}
+.ack i{width:32px;height:32px;border-radius:50%;border:2px solid var(--mut);display:grid;place-items:center;flex:none;color:transparent;font-style:normal;font-size:18px;font-weight:800}
+.ack.on{border-color:var(--ok)}.ack.on i{background:var(--ok);border-color:var(--ok);color:#fff}
+.kfoot{margin-top:6px;text-align:center}
 .kfoot .btn{border:0;background:none;box-shadow:none;min-height:44px;padding:10px 16px;font-size:12px;font-weight:500;color:var(--mut);opacity:.55}
 .kfoot .btn:active{opacity:1}
 /* sheet */
@@ -191,7 +216,7 @@ var WD = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
 function wd(d) { return WD[new Date(d + 'T00:00:00Z').getUTCDay()]; }
 function dm(d) { return d.slice(8, 10) + '/' + d.slice(5, 7); }
 function dur(min) { min = Math.round(min || 0); return Math.floor(min / 60) + 'g' + p2(min % 60); }
-function ago(ms) { var m = Math.floor((now() - ms) / 60000); if (m < 1) return 'vừa xong'; if (m < 60) return m + ' phút trước'; return Math.floor(m / 60) + ' giờ trước'; }
+function ago(ms) { var m = Math.floor((now() - ms) / 60000); if (m < 1) return 'vừa xong'; if (m < 60) return m + ' phút trước'; if (m < 2880) return Math.floor(m / 60) + ' giờ trước'; return Math.floor(m / 1440) + ' ngày trước'; }
 function addM(m, n) { var p = m.split('-'), d = new Date(Date.UTC(+p[0], +p[1] - 1 + n, 1)); return d.toISOString().slice(0, 7); }
 function color(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360; return 'hsl(' + h + ',70%,50%)'; }
 function av(name, id) { return '<div class="av" style="background:' + color(id || name) + '">' + esc((name || '?').trim().split(/\s+/).pop().charAt(0).toUpperCase()) + '</div>'; }
@@ -266,6 +291,7 @@ document.addEventListener('keydown', function (e) {
 
 /* ---------- form chung ---------- */
 function fieldHTML(f, v) {
+  if (f.type === 'html') return f.html;
   var l = esc(f.label), k = esc(f.k), h = f.hint ? '<div class="hint">' + esc(f.hint) + '</div>' : '';
   if (f.type === 'switch') return '<label class="fld sw"><span>' + l + '</span><input type="checkbox" data-k="' + k + '"' + (v ? ' checked' : '') + '></label>' + h;
   if (f.type === 'select') {
@@ -304,14 +330,14 @@ function startClock() {
 function logoCh() { var n = String((S.boot && S.boot.shopName) || '').trim(); return n ? n.charAt(0).toUpperCase() : '⏱'; }
 function greet() {
   var h = parseInt(hm(now()).split(':')[0], 10);
-  return (h < 11 ? '☀️ Chào buổi sáng' : h < 14 ? '🌤️ Chào buổi trưa' : h < 18 ? '🌇 Chào buổi chiều' : '🌙 Chào buổi tối') + '! Bấm tên của bạn để chấm công';
+  return (h < 11 ? '☀️ Chào buổi sáng' : h < 14 ? '🌤️ Chào buổi trưa' : h < 18 ? '🌇 Chào buổi chiều' : '🌙 Chào buổi tối') + '!';
 }
+function stopTimers() { clearInterval(S.pollT); clearInterval(S.qrT); clearInterval(S.infoT); clearInterval(S.clockT); stopScan(); }
 function resetIdle() {
   clearTimeout(S.idleT);
-  var ms = S.view === 'kiosk' ? ((S.kl && S.kl.idleSec > 0 ? S.kl.idleSec : 45) * 1000) : (S.view === 'mgr' && S.boot && S.boot.isKiosk ? 300000 : 0);
-  if (ms) S.idleT = setTimeout(onIdle, ms);
+  if (S.view === 'mgr' && S.boot && S.boot.isKiosk) S.idleT = setTimeout(onIdle, 300000); // quản lý quên đăng xuất trên iPad
 }
-function onIdle() { if (S.view === 'kiosk') { closeSheet(); loadKiosk(true); } else if (S.view === 'mgr') doLogout(); }
+function onIdle() { if (S.view === 'mgr') doLogout(); }
 document.addEventListener('click', function (e) {
   resetIdle();
   var el = e.target.closest('[data-act]'); if (!el) return;
@@ -319,82 +345,241 @@ document.addEventListener('click', function (e) {
 });
 document.addEventListener('touchstart', resetIdle, { passive: true });
 
-/* =====================================================================
- *  MÀN HÌNH CHẤM CÔNG (iPad)
- * ===================================================================== */
-function vKiosk() {
-  S.view = 'kiosk'; clearInterval(S.pollT); clearInterval(S.kioskT);
-  app.innerHTML = '<div class="kiosk"><header class="kban"><div class="logo">' + esc(logoCh()) + '</div><div class="ktxt"><h1>' + esc(S.boot.shopName) + '</h1><div class="hi" id="hi"></div></div><div class="clock"><b id="clk"></b><span id="dt"></span></div></header>' +
-    '<div class="kmain"><div id="kbar"></div><div class="grid" id="grid"><div class="muted">Đang tải…</div></div><div class="kfoot"><button class="btn ghost" data-act="mgrLogin">Đăng nhập dưới quyền quản lý</button></div></div></div>';
-  startClock(); loadKiosk(); resetIdle();
-  S.kioskT = setInterval(function () { if (!$('#sheetHost').firstChild) loadKiosk(true); }, 30000);
+/* ---------- thư viện ngoài (chỉ tải khi cần) ---------- */
+var LIBS = {
+  qr: ['https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js'],
+  jsqr: ['https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js', 'https://unpkg.com/jsqr@1.4.0/dist/jsQR.js']
+};
+function loadLib(name) {
+  S.libs = S.libs || {};
+  if (S.libs[name]) return S.libs[name];
+  var urls = LIBS[name].slice();
+  S.libs[name] = new Promise(function (res, rej) {
+    (function next() {
+      var u = urls.shift();
+      if (!u) { S.libs[name] = null; return rej(new Error('Không tải được thư viện. Kiểm tra mạng rồi thử lại.')); }
+      var s = document.createElement('script'); s.src = u; s.async = true;
+      s.onload = function () { res(); };
+      s.onerror = function () { s.remove(); next(); };
+      document.head.appendChild(s);
+    })();
+  });
+  return S.libs[name];
 }
-function loadKiosk(quiet) {
-  return call('kioskList', { deviceToken: S.kioskToken }).then(function (d) {
-    S.clockOff = d.serverNow - Date.now(); S.kl = d;
-    var bar = $('#kbar'); if (!bar) return;
-    bar.innerHTML = d.requirePhoto ? '<div class="photobar">📷 Hôm nay chấm công cần chụp ảnh khuôn mặt</div>' : '';
-    $('#grid').innerHTML = d.emps.length ? d.emps.map(function (e) {
-      var st = e.state === 'IN' ? '<span class="st in">● Đang làm từ ' + hm(e.since) + '</span>' : '<span class="st">Chưa vào ca</span>';
-      return '<button class="emp ' + (e.state === 'IN' ? 'in' : '') + '" data-act="pick" data-id="' + esc(e.id) + '">' + av(e.name, e.id) + '<b>' + esc(e.name) + '</b>' + st + '</button>';
-    }).join('') : '<div class="muted">Chưa có nhân viên. Quản lý hãy thêm nhân viên.</div>';
-  }).catch(function (e) {
-    if (e.code === 'NOKIOSK') { S.kioskToken = ''; lsSet('kioskToken', null); S.boot.isKiosk = false; return vLogin(); }
-    if (!quiet) toast(e.message);
+function hexOf(buf) { return [].map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join(''); }
+function newDeviceKey() { var a = new Uint8Array(32); crypto.getRandomValues(a); return hexOf(a); }
+function storageOk() { try { localStorage.setItem('_t', '1'); var ok = localStorage.getItem('_t') === '1'; localStorage.removeItem('_t'); return ok; } catch (e) { return false; } }
+function devName() {
+  var u = navigator.userAgent, m, n = 'Điện thoại';
+  if (/iPhone/.test(u)) n = 'iPhone'; else if (/iPad/.test(u)) n = 'iPad';
+  else if ((m = /Android[^;]*; ([^)]+)\)/.exec(u))) { n = m[1].split(' Build')[0].trim(); if (n.length < 3) n = 'Android'; }
+  else if (/Windows/.test(u)) n = 'Máy tính Windows'; else if (/Macintosh/.test(u)) n = 'Máy tính Mac';
+  return (n + (INSTALLED ? ' (ứng dụng)' : ' (trình duyệt)')).slice(0, 60);
+}
+
+/* =====================================================================
+ *  MÀN HÌNH ĐẦU: iPad hiện mã QR · điện thoại chưa đăng nhập hiện lối vào cho nhân viên
+ * ===================================================================== */
+function stepsHTML() {
+  var st = [['📲', 'Cài ứng dụng', IOS ? 'Bấm Chia sẻ → Thêm vào MH chính.' : 'Bấm ⋮ → Cài đặt ứng dụng.'],
+    ['🔑', 'Đăng nhập nhân viên', 'Nhập mã 4 số quản lý đưa. Chỉ làm 1 lần.'],
+    ['📷', 'Bấm Chấm công', 'Quét mã QR trên màn hình iPad.']];
+  return '<section class="steps"><h2>Cách chấm công</h2>' + st.map(function (s, i) {
+    return '<div class="step"><div class="sn">' + s[0] + '</div><div><b>' + (i + 1) + '. ' + s[1] + '</b><span class="d">' + s[2] + '</span></div></div>';
+  }).join('') + '</section>';
+}
+function mgrLink() { return '<div class="kfoot"><button class="btn ghost" data-act="mgrLogin" style="justify-content:center;display:inline-flex;width:auto">Đăng nhập dưới quyền quản lý</button></div>'; }
+function vHome() { if (S.boot.isKiosk) vKiosk(); else if (lsGet('deviceKey')) vStaff(); else vWelcome(); }
+ACT.toHome = function () { vHome(); };
+
+function vKiosk() {
+  stopTimers(); S.view = 'kiosk'; closeSheet();
+  app.innerHTML = '<div class="kiosk"><header class="kban"><div class="logo">' + esc(logoCh()) + '</div><div class="ktxt"><h1>' + esc(S.boot.shopName) + '</h1><div class="hi" id="hi"></div></div><div class="clock"><b id="clk"></b><span id="dt"></span></div></header>' +
+    '<div class="kmain"><div class="kgrid"><section class="qrcard"><div id="qrBox"><span class="muted">Đang tạo mã…</span></div><div class="qrbar"><i id="qrFill"></i></div><p class="qrtip">Mã tự đổi liên tục — phải quét trực tiếp trên màn hình này</p></section>' + stepsHTML() + '</div>' + mgrLink() + '</div></div>';
+  startClock(); loadKioskInfo(); keepAwake(); resetIdle();
+}
+ACT.kioskRetry = function () { loadKioskInfo(); };
+function keepAwake() { try { if (navigator.wakeLock && S.view === 'kiosk') navigator.wakeLock.request('screen').catch(function () {}); } catch (e) {} }
+document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') keepAwake(); });
+
+/* Mã QR = CC.<chu kỳ>.<12 ký tự đầu của HMAC-SHA256(khoá bí mật, chu kỳ)> — iPad tự tính, không gọi mạng mỗi vài giây. */
+function qrMaker(secret) {
+  var enc = new TextEncoder();
+  return crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']).then(function (key) {
+    return function (win) { return crypto.subtle.sign('HMAC', key, enc.encode(String(win))).then(function (sig) { return 'CC.' + win + '.' + hexOf(sig).slice(0, 12); }); };
   });
 }
-ACT.pick = function (el) {
-  var emp = (S.kl.emps.filter(function (e) { return e.id === el.dataset.id; })[0]);
-  if (!S.kl.requirePin) { // tắt PIN: bấm tên → màn xác nhận
-    call('kioskLogin', { deviceToken: S.kioskToken, empId: emp.id }).then(function (r) { S.clockOff = r.serverNow - Date.now(); showAction(r, emp); }).catch(function (e) { toast(e.message); });
+function qrSvg(text) {
+  var q = window.qrcode(0, 'M'); q.addData(text); q.make();
+  var n = q.getModuleCount(), m = 4, d = '', r, c, s = n + 2 * m;
+  for (r = 0; r < n; r++) for (c = 0; c < n; c++) if (q.isDark(r, c)) d += 'M' + (c + m) + ' ' + (r + m) + 'h1v1h-1z';
+  return '<svg viewBox="0 0 ' + s + ' ' + s + '" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mã QR chấm công"><rect width="' + s + '" height="' + s + '" fill="#fff"/><path d="' + d + '" fill="#0f172a"/></svg>';
+}
+function loadKioskInfo() {
+  return call('kioskInfo', { deviceToken: S.kioskToken }).then(function (d) {
+    if (S.view !== 'kiosk') return;
+    S.clockOff = d.serverNow - Date.now(); S.ki = d;
+    return Promise.all([loadLib('qr'), qrMaker(d.qrSecret)]).then(function (a) {
+      if (S.view !== 'kiosk') return;
+      S.qrFn = a[1]; S.qrWin = (d.winSec || 15) * 1000; S.qrLast = -1; startQr();
+    });
+  }).catch(function (e) {
+    if (e.code === 'NOKIOSK') { S.kioskToken = ''; lsSet('kioskToken', null); S.boot.isKiosk = false; return vHome(); }
+    var b = $('#qrBox'); if (b) b.innerHTML = '<div class="muted c">' + esc(e.message) + '<br><br><button class="btn" data-act="kioskRetry">Thử lại</button></div>';
+  });
+}
+function startQr() {
+  clearInterval(S.qrT); clearInterval(S.infoT);
+  function tick() {
+    if (S.view !== 'kiosk' || !S.qrFn) return;
+    var t = now(), w = Math.floor(t / S.qrWin), f = $('#qrFill');
+    if (f) f.style.width = ((1 - (t % S.qrWin) / S.qrWin) * 100).toFixed(1) + '%';
+    if (w !== S.qrLast) {
+      S.qrLast = w;
+      S.qrFn(w).then(function (txt) { var b = $('#qrBox'); if (w === S.qrLast && b && S.view === 'kiosk') b.innerHTML = qrSvg(txt); });
+    }
+  }
+  tick(); S.qrT = setInterval(tick, 250);
+  // 5 phút lấy lại giờ chuẩn của máy chủ (iPad chạy lâu có thể lệch giờ) và khoá QR nếu có đổi
+  S.infoT = setInterval(function () {
+    call('kioskInfo', { deviceToken: S.kioskToken }).then(function (d) {
+      S.clockOff = d.serverNow - Date.now();
+      if (S.ki && d.qrSecret !== S.ki.qrSecret) { S.ki = d; qrMaker(d.qrSecret).then(function (fn) { S.qrFn = fn; S.qrLast = -1; }); }
+    }).catch(function () {});
+  }, 300000);
+}
+
+function vWelcome() {
+  stopTimers(); S.view = 'welcome'; closeSheet();
+  app.innerHTML = '<div class="login"><div class="logo" style="margin:0 auto 12px;width:68px;height:68px;font-size:32px;border-radius:22px">' + esc(logoCh()) + '</div><h1 style="font-size:24px;font-weight:800;margin-bottom:16px">' + esc(S.boot.shopName) + '</h1>' +
+    '<div class="staffcta"><h2>Bạn là nhân viên?</h2><p>Đăng nhập một lần để chấm công bằng điện thoại này.</p><button class="btn" data-act="enroll" style="justify-content:center;margin:0">Đăng nhập nhân viên</button></div>' +
+    stepsHTML() + mgrLink() + '</div>';
+}
+
+/* ---------- Nhân viên đăng nhập 1 lần để "tin tưởng" điện thoại ---------- */
+ACT.enroll = function () {
+  if (IOS && !INSTALLED) {
+    openSheet('<div class="c"><div style="font-size:48px">📲</div><h2>Thêm ứng dụng vào Màn hình chính trước</h2><p>Bấm nút <b>Chia sẻ</b> của Safari → <b>Thêm vào MH chính</b>. Rồi mở ứng dụng từ biểu tượng mới đó và đăng nhập nhân viên ở đó.</p><div class="btns"><button class="btn pri" data-act="sheetClose">Đã hiểu</button></div></div>');
     return;
   }
-  showPin('Xin chào ' + emp.name, '', function (pin) {
-    return call('kioskLogin', { deviceToken: S.kioskToken, empId: emp.id, pin: pin }).then(function (r) {
-      S.clockOff = r.serverNow - Date.now();
-      if (r.requirePhoto) showAction(r, emp); // cần chụp ảnh: phải bấm nút để mở camera
-      else { S.act = r; punch(null); }        // bật PIN: nhập đúng PIN là chấm công luôn
+  if (!storageOk()) { toast('Trình duyệt đang chặn lưu dữ liệu (chế độ riêng tư?). Hãy mở bằng ứng dụng thường.'); return; }
+  showPin('Đăng nhập nhân viên', 'Nhập mã 4 số quản lý đưa cho bạn', function (pin) {
+    var key = newDeviceKey();
+    return call('staffEnroll', { pin: pin, key: key, step: 'check' }).then(function (r) {
+      if (r.already) { lsSet('deviceKey', key); closeSheet(); return vStaff(); }
+      showTrust(r.name, pin, key);
     });
   });
 };
-function showAction(r, emp) {
-  var isIn = r.state === 'IN';
-  openSheet('<div class="c">' + '<div class="row" style="justify-content:center">' + av(emp.name, emp.id) + '<h2>' + esc(r.name) + '</h2></div>' +
-    (isIn ? '<p class="muted">Bạn đang làm từ ' + hm(r.since) + '</p>' : '') +
-    '<button class="big ' + (isIn ? 'no' : 'ok') + '" id="goBtn" data-act="go">' + (r.requirePhoto ? '📷 ' : '') + (isIn ? 'CHỐT CA' : 'MỞ CA') + '</button>' +
-    '<input type="file" id="cam" accept="image/*" capture="user" style="display:none">' +
-    '<button class="btn ghost" data-act="sheetClose" style="width:100%">Quay lại</button></div>', { sticky: true });
-  S.act = r;
-  var cam = $('#cam');
-  cam.onchange = function () { if (cam.files && cam.files[0]) readPhoto(cam.files[0]).then(punch).catch(function (e) { toast(e.message); }); };
+var TRUST = [
+  ['🧹', 'Đừng xoá dữ liệu', 'Không xoá "dữ liệu duyệt web", "dữ liệu trang web" hay bộ nhớ của ứng dụng này. Xoá là mất chìa khoá chấm công.'],
+  ['📲', 'Giữ nguyên ứng dụng', 'Không gỡ ứng dụng hay biểu tượng khỏi màn hình chính. Luôn chấm công từ đúng biểu tượng đó.'],
+  ['🔄', 'Điện thoại bị reset', 'Khôi phục cài đặt gốc hoặc cài lại máy sẽ mất chìa khoá.'],
+  ['📱', 'Đổi hoặc mất điện thoại', 'Báo quản lý ngay để huỷ máy cũ, rồi đăng nhập lại trên máy mới.'],
+  ['🚫', 'Không cho mượn', 'Mỗi điện thoại chỉ dùng cho một người. Không chấm công hộ ai và không nhờ ai chấm hộ.'],
+  ['🕶️', 'Không dùng tab ẩn danh hay trình duyệt khác', 'Chỉ dùng đúng ứng dụng này.'],
+  ['❗', 'Báo lỗi "chưa được tin tưởng"', 'Báo quản lý, đừng tự thử lại nhiều lần.']
+];
+function showTrust(name, pin, key) {
+  S.pinState = null; S.trust = { pin: pin, key: key, ack: false };
+  openSheet('<h2>Tin tưởng điện thoại này?</h2><p class="muted" style="margin:4px 0 6px">Điện thoại này sẽ là chìa khoá chấm công của <b>' + esc(name) + '</b>. Đọc kỹ các lưu ý:</p>' +
+    '<ul class="notes">' + TRUST.map(function (t) { return '<li><span class="ni">' + t[0] + '</span><div><b>' + esc(t[1]) + '</b><br><span class="muted">' + esc(t[2]) + '</span></div></li>'; }).join('') + '</ul>' +
+    '<button class="ack" id="ack" data-act="ackToggle" role="checkbox" aria-checked="false"><i>✓</i><span>Tôi đã đọc hết các lưu ý trên</span></button>' +
+    '<div class="btns"><button class="btn pri" id="trustBtn" data-act="trustGo" disabled style="flex:2">Tin tưởng máy này</button><button class="btn ghost" data-act="sheetClose">Huỷ</button></div>', { sticky: true });
 }
-ACT.go = function () { if (S.act.requirePhoto) $('#cam').click(); else punch(null); };
-function readPhoto(file) {
-  return new Promise(function (res, rej) {
-    var img = new Image(), url = URL.createObjectURL(file);
-    img.onload = function () {
-      var s = Math.min(1, 480 / Math.max(img.width, img.height)), c = document.createElement('canvas');
-      c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
-      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url); res(c.toDataURL('image/jpeg', 0.6));
-    };
-    img.onerror = function () { rej(new Error('Không đọc được ảnh, thử chụp lại')); };
-    img.src = url;
-  });
-}
-function punch(photo) {
-  var b = $('#goBtn'); if (b) { b.disabled = true; b.textContent = 'Đang gửi…'; }
-  call('kioskPunch', { token: S.act.token, photo: photo }).then(function (d) {
-    var open = d.type === 'OPEN', notes = [];
-    if (open && d.lateMin) notes.push('Trễ ' + d.lateMin + ' phút so với ca');
-    if (!open && d.earlyMin) notes.push('Về sớm ' + d.earlyMin + ' phút');
-    if (!open && d.otMin) notes.push('Làm thêm ' + d.otMin + ' phút');
-    openSheet('<div class="done"><div class="tick">✅</div><h2>' + esc(S.act.name || '') + '</h2><h2>Đã ' + (open ? 'MỞ CA' : 'CHỐT CA') + ' lúc ' + hm(d.at) + '</h2><p class="muted">Chờ quản lý duyệt</p>' +
-      (d.shift ? '<p>' + esc(d.shift) + '</p>' : '') + (notes.length ? '<p><b>' + esc(notes.join(' · ')) + '</b></p>' : '') + '</div>', { sticky: false });
-    S.doneT = setTimeout(function () { closeSheet(); loadKiosk(true); }, ((S.kl && S.kl.doneSec > 0 ? S.kl.doneSec : 4) * 1000));
-    loadKiosk(true);
+ACT.ackToggle = function (el) {
+  var t = S.trust; if (!t) return;
+  t.ack = !t.ack; el.classList.toggle('on', t.ack); el.setAttribute('aria-checked', t.ack ? 'true' : 'false');
+  var b = $('#trustBtn'); if (b) b.disabled = !t.ack;
+};
+ACT.trustGo = function (el) {
+  var t = S.trust; if (!t || !t.ack) return;
+  el.disabled = true; el.textContent = 'Đang lưu…';
+  call('staffEnroll', { pin: t.pin, key: t.key, step: 'confirm', deviceName: devName(), ua: navigator.userAgent }).then(function () {
+    lsSet('deviceKey', t.key); S.trust = null;
+    if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(function () {}); // xin trình duyệt đừng tự dọn dữ liệu
+    closeSheet(); toast('Đã tin tưởng điện thoại này'); vStaff();
+  }).catch(function (e) { el.disabled = false; el.textContent = 'Tin tưởng máy này'; toast(e.message); });
+};
+
+/* ---------- Màn hình của nhân viên mỗi lần mở ứng dụng ---------- */
+function vStaff() {
+  stopTimers(); S.view = 'staff'; closeSheet();
+  var key = lsGet('deviceKey'); if (!key) return vWelcome();
+  app.innerHTML = '<div class="shome"><div class="hello" id="hello">&nbsp;</div><button class="punchbtn" data-act="scanStart">Chấm công</button><div class="muted" id="sstate">&nbsp;</div>' + mgrLink() + '</div>';
+  call('deviceHome', { key: key }).then(function (d) {
+    if (S.view !== 'staff') return;
+    S.clockOff = d.serverNow - Date.now();
+    var h = $('#hello'), s = $('#sstate');
+    if (h) h.textContent = 'Xin chào, ' + d.name;
+    if (s) s.textContent = d.state === 'IN' ? 'Đang làm từ ' + hm(d.since) : '';
   }).catch(function (e) {
-    toast(e.message); closeSheet(); loadKiosk(true);
+    if (e.code === 'NODEVICE') { lsSet('deviceKey', null); toast(e.message); if (S.view === 'staff') vWelcome(); return; }
+    var s = $('#sstate'); if (s) s.textContent = e.message;
   });
+}
+function scanMsg(t) { var m = $('#scm'); if (m) m.textContent = t; }
+function stopStream() { try { if (S.stream) S.stream.getTracks().forEach(function (t) { t.stop(); }); } catch (e) {} S.stream = null; }
+function stopScan() {
+  clearTimeout(S.scanT); stopStream();
+  var h = document.getElementById('scanHost'); if (h) h.remove();
+  if (S.view === 'scan') S.view = 'staff';
+}
+ACT.scanStart = function () {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { toast('Điện thoại hoặc trình duyệt này không mở được camera.'); return; }
+  stopScan(); S.view = 'scan'; S.scanBusy = false;
+  var host = document.createElement('div'); host.className = 'scan'; host.id = 'scanHost';
+  host.innerHTML = '<video id="scv" playsinline muted autoplay></video><div class="top2"><button class="btn" data-act="scanStop">‹ Quay lại</button></div><div class="frame"></div><div class="msg" id="scm">Hướng camera vào mã QR trên iPad</div>';
+  document.body.appendChild(host);
+  // camera SAU (environment). "ideal" để máy không có camera sau (máy tính) vẫn dùng được camera còn lại.
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false }).then(function (st) {
+    if (S.view !== 'scan') { st.getTracks().forEach(function (t) { t.stop(); }); return; }
+    S.stream = st;
+    return loadLib('jsqr').then(function () {
+      var v = $('#scv'); if (!v || S.view !== 'scan') return;
+      v.srcObject = st;
+      return Promise.resolve(v.play()).catch(function () {}).then(function () { scanLoop(); });
+    });
+  }).catch(function (e) {
+    stopStream();
+    var msg = e && (e.name === 'NotAllowedError' || e.name === 'SecurityError') ? 'Chưa cho phép dùng camera. Hãy bật quyền Camera cho ứng dụng trong Cài đặt điện thoại rồi bấm Thử lại.' :
+      e && e.name === 'NotFoundError' ? 'Không tìm thấy camera trên máy này.' : (e && e.message) || 'Không mở được camera.';
+    var m = $('#scm'); if (m) m.innerHTML = esc(msg) + '<br><br><button class="btn" data-act="scanStart">Thử lại</button>';
+    var fr = document.querySelector('#scanHost .frame'); if (fr) fr.style.display = 'none';
+  });
+};
+ACT.scanStop = function () { stopScan(); vStaff(); };
+function scanLoop() {
+  var v = $('#scv'); if (!v || S.view !== 'scan') return;
+  if (!S.scanBusy && v.readyState >= 2 && v.videoWidth) {
+    var cv = S.cv || (S.cv = document.createElement('canvas')), k = Math.min(1, 720 / Math.max(v.videoWidth, v.videoHeight));
+    cv.width = Math.round(v.videoWidth * k); cv.height = Math.round(v.videoHeight * k);
+    var cx = cv.getContext('2d', { willReadFrequently: true }); cx.drawImage(v, 0, 0, cv.width, cv.height);
+    var img = cx.getImageData(0, 0, cv.width, cv.height), r = window.jsQR(img.data, img.width, img.height, { inversionAttempts: 'dontInvert' });
+    if (r && r.data) onQr(r.data);
+  }
+  S.scanT = setTimeout(scanLoop, 120);
+}
+function onQr(text) {
+  if (!/^CC\.\d{1,10}\.[0-9a-f]{12}$/.test(text)) { scanMsg('Đây không phải mã chấm công. Hãy quét mã đang hiện trên iPad.'); return; }
+  S.scanBusy = true; scanMsg('Đang xác nhận…');
+  if (navigator.vibrate) navigator.vibrate(60);
+  call('devicePunch', { key: lsGet('deviceKey'), qr: text }).then(function (d) { stopScan(); showPunchDone(d); }).catch(function (e) {
+    if (e.code === 'NODEVICE') { stopScan(); lsSet('deviceKey', null); toast(e.message); vWelcome(); return; }
+    if (e.code === 'TOOFAST' || e.code === 'LOCK') { stopScan(); vStaff(); openSheet('<div class="c"><div style="font-size:48px">⏳</div><h2>' + esc(e.message) + '</h2><div class="btns"><button class="btn pri" data-act="sheetClose">Đã hiểu</button></div></div>'); return; }
+    scanMsg(e.message);
+    setTimeout(function () { S.scanBusy = false; }, 2200); // mã hết hạn / lỗi mạng: tiếp tục quét
+  });
+}
+function showPunchDone(d) {
+  var open = d.type === 'OPEN', notes = [];
+  if (open && d.lateMin) notes.push('Trễ ' + d.lateMin + ' phút so với ca');
+  if (!open && d.earlyMin) notes.push('Về sớm ' + d.earlyMin + ' phút');
+  if (!open && d.otMin) notes.push('Làm thêm ' + d.otMin + ' phút');
+  vStaff();
+  openSheet('<div class="done"><div class="tick">✅</div><h2>' + esc(d.name || '') + '</h2><h2>Đã ' + (open ? 'MỞ CA' : 'CHỐT CA') + ' lúc ' + hm(d.at) + '</h2>' +
+    (d.shift ? '<p>' + esc(d.shift) + '</p>' : '') + (notes.length ? '<p><b>' + esc(notes.join(' · ')) + '</b></p>' : '') + '<div class="btns"><button class="btn pri" data-act="sheetClose">Xong</button></div></div>', { sticky: true });
+  S.doneT = setTimeout(closeSheet, (d.doneSec > 0 ? d.doneSec : 4) * 1000);
 }
 ACT.mgrLogin = function () { vLogin(); };
 
@@ -402,13 +587,11 @@ ACT.mgrLogin = function () { vLogin(); };
  *  ĐĂNG NHẬP QUẢN LÝ
  * ===================================================================== */
 function vLogin() {
-  S.view = 'login'; clearInterval(S.kioskT); clearInterval(S.pollT); closeSheet();
+  stopTimers(); S.view = 'login'; closeSheet();
   app.innerHTML = '<div class="login"><div class="logo" style="margin:0 auto 12px;width:68px;height:68px;font-size:32px;border-radius:22px">' + esc(logoCh()) + '</div><h1 style="font-size:24px;font-weight:800">' + esc(S.boot.shopName) + '</h1><p class="muted">Đăng nhập quản lý</p>' +
     (S.boot.managers.length ? S.boot.managers.map(function (m) { return '<button class="btn" data-act="mpick" data-id="' + esc(m.id) + '">' + av(m.name, m.id) + '<div><b>' + esc(m.name) + '</b><div class="muted">' + (m.role === 'CHU' ? 'Chủ' : 'Quản lý') + '</div></div></button>'; }).join('') : '<p>Chưa có tài khoản quản lý. Chạy hàm setup() trong Apps Script.</p>') +
-    (S.boot.isKiosk ? '<button class="btn ghost" style="justify-content:center" data-act="toKiosk">← Về màn hình chấm công</button>' :
-      '<p class="muted" style="font-size:13px;margin-top:18px">Bạn là nhân viên? Màn hình chấm công chỉ hiện trên <b>iPad ở quầy</b> (máy đã đăng ký). Hãy dùng iPad đó, hoặc nhờ quản lý đăng ký máy này: đăng nhập quản lý → Thêm → Cài đặt.</p>') + '</div>';
+    '<button class="btn ghost" style="justify-content:center" data-act="toHome">← Quay lại</button></div>';
 }
-ACT.toKiosk = function () { vKiosk(); };
 ACT.toKioskNow = function () { closeSheet(); doLogout(); };
 ACT.mpick = function (el) {
   var m = S.boot.managers.filter(function (x) { return x.id === el.dataset.id; })[0];
@@ -422,7 +605,7 @@ ACT.mpick = function (el) {
 function doLogout() {
   var t = S.token; S.token = ''; ssSet('tok', null); ssSet('usr', null); closeSheet();
   if (t) call('logout', { token: t }).catch(function () {});
-  if (S.boot.isKiosk) vKiosk(); else vLogin();
+  vHome();
 }
 ACT.logout = function () { doLogout(); };
 
@@ -431,33 +614,24 @@ ACT.logout = function () { doLogout(); };
  * ===================================================================== */
 function ic(p) { return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + '</svg>'; }
 var TABS = [
-  ['approve', ic('<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>'), 'Duyệt'],
+  ['approve', ic('<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>'), 'Lưu ý'],
   ['today', ic('<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>'), 'Hôm nay'],
   ['sched', ic('<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/>'), 'Lịch'],
   ['report', ic('<line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/>'), 'Báo cáo'],
   ['more', ic('<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>'), 'Thêm']
 ];
 function vMgr() {
-  S.view = 'mgr'; clearInterval(S.kioskT);
+  stopTimers(); S.view = 'mgr';
   if (!S.user) { try { S.user = JSON.parse(ssGet('usr')); } catch (e) {} }
   S.month = ymd(now()).slice(0, 7);
   app.innerHTML = '<div class="mgr"><div class="top"><div class="logo">' + esc(logoCh()) + '</div><div class="grow"><h1>' + esc(S.boot.shopName) + '</h1><small>' + esc(S.user ? S.user.name : '') + '</small></div>' +
-    '<button class="pill" id="photoPill" data-act="togglePhoto"></button><button class="pill" data-act="logout">Thoát</button></div><div id="body"></div>' +
+    '<button class="pill" data-act="logout">Thoát</button></div><div id="body"></div>' +
     '<div class="nav">' + TABS.map(function (t) { return '<button data-act="tab" data-t="' + t[0] + '" id="tab_' + t[0] + '">' + t[1] + '<span>' + t[2] + '</span>' + (t[0] === 'approve' ? '<b class="badge" id="bdg" style="display:none"></b>' : '') + '</button>'; }).join('') + '</div></div>';
-  paintPhotoPill(S.boot.requirePhoto);
   setTab(S.tab || 'approve');
   clearInterval(S.pollT); S.pollT = setInterval(poll, 15000);
   resetIdle();
 }
 function body(h) { var b = $('#body'); if (b) b.innerHTML = h; }
-function paintPhotoPill(on) {
-  S.boot.requirePhoto = on; var p = $('#photoPill'); if (!p) return;
-  p.className = 'pill' + (on ? ' on' : ''); p.textContent = '📷 Chụp ảnh: ' + (on ? 'BẬT' : 'TẮT');
-}
-ACT.togglePhoto = function () {
-  var on = !S.boot.requirePhoto;
-  api('settingsSet', { values: { requirePhoto: on } }).then(function (r) { paintPhotoPill(r.settings.requirePhoto); toast(r.settings.requirePhoto ? 'Đã BẬT chụp ảnh khi nhân viên chấm công' : 'Đã TẮT chụp ảnh'); }).catch(function (e) { toast(e.message); });
-};
 function badge() { var b = $('#bdg'); if (!b) return; b.style.display = S.pend ? 'inline-block' : 'none'; b.textContent = S.pend; document.title = (S.pend ? '(' + S.pend + ') ' : '') + 'Chấm công'; }
 function beep() {
   try { if (navigator.vibrate) navigator.vibrate([200, 100, 200]); var C = window.AudioContext || window.webkitAudioContext, a = new C(), o = a.createOscillator(), g = a.createGain();
@@ -486,9 +660,9 @@ function tApprove(quiet) {
   return guard(my, api('pending')).then(function (d) {
     if (!d) return; S.clockOff = d.serverNow - Date.now(); S.pend = d.items.length; S.pendItems = d.items; badge();
     var h = '';
-    if (!S.boot.isKiosk && !S.boot.kioskCount) h += '<div class="card" style="border:1px solid var(--warn,#e0a000)"><b>⚠ Chưa có máy chấm công</b><div class="muted" style="margin:4px 0 10px">Nhân viên chưa có trang để mở ca / chốt ca. Bấm nút dưới đây trên iPad ở quầy (hoặc máy này) để tạo.</div><button class="btn pri" style="width:100%" data-act="regKiosk" data-from="banner">Dùng thiết bị này làm MÁY CHẤM CÔNG</button></div>';
+    if (!S.boot.isKiosk && !S.boot.kioskCount) h += '<div class="card" style="border:1px solid var(--warn,#e0a000)"><b>⚠ Chưa có iPad hiện mã QR</b><div class="muted" style="margin:4px 0 10px">Bấm nút dưới đây trên iPad ở quầy để tạo.</div><button class="btn pri" style="width:100%" data-act="regKiosk" data-from="banner">Dùng thiết bị này làm MÁY CHẤM CÔNG</button></div>';
     if (d.items.length) h += '<div class="row" style="margin-bottom:8px"><b class="grow">' + d.items.length + ' yêu cầu chờ duyệt</b><button class="btn ok" data-act="approveAll">Duyệt tất cả</button></div>';
-    else h += '<div class="card c"><div style="font-size:42px">🎉</div><b>Không có yêu cầu nào chờ duyệt</b></div>';
+    else h += '<div class="card c"><div style="font-size:42px">🎉</div><b>Không có gì cần xử lý</b></div>';
     h += d.items.map(function (it) {
       var chips = '';
       if (it.shift) chips += '<span class="chip">' + esc(it.shift) + '</span>';
@@ -530,11 +704,10 @@ function tToday() {
   return guard(my, api('today')).then(function (d) {
     if (!d) return; S.clockOff = d.serverNow - Date.now(); S.today = d;
     var inN = d.emps.filter(function (e) { return e.state === 'IN'; }).length, ab = d.emps.filter(function (e) { return e.state === 'ABSENT'; }).length;
-    var h = '<div class="stat"><div class="card grow s-ok"><b>' + inN + '</b><span class="muted">Đang làm</span></div><div class="card grow s-no"><b>' + ab + '</b><span class="muted">Chưa đến</span></div><div class="card grow s-warn"><b>' + d.pending + '</b><span class="muted">Chờ duyệt</span></div></div>';
+    var h = '<div class="stat"><div class="card grow s-ok"><b>' + inN + '</b><span class="muted">Đang làm</span></div><div class="card grow s-no"><b>' + ab + '</b><span class="muted">Chưa đến</span></div><div class="card grow"><b>' + d.emps.filter(function (e) { return e.state === 'DONE'; }).length + '</b><span class="muted">Đã xong ca</span></div></div>';
     h += d.emps.map(function (e) {
       var s = STL[e.state], chips = '';
       chips += '<span class="chip ' + s[1] + '">' + s[0] + (e.state === 'IN' ? ' từ ' + hm(e.since) : e.state === 'ABSENT' ? ' · trễ ' + e.lateMin + ' phút' : '') + '</span>';
-      if (e.state === 'IN' && e.openStatus === 'CHO') chips += '<span class="chip warn">⏳ chờ duyệt</span>';
       e.shifts.forEach(function (x) { chips += '<span class="chip">' + esc(x) + '</span>'; });
       return '<div class="card erow">' + av(e.name, e.id) + '<div class="etxt"><b>' + esc(e.name) + '</b>' + (chips ? '<div class="chips">' + chips + '</div>' : '') + '</div><button class="btn ' + (e.state === 'IN' ? '' : 'pri') + '" data-act="punchFor" data-id="' + esc(e.id) + '">' + (e.state === 'IN' ? 'Chốt ca hộ' : 'Mở ca hộ') + '</button></div>';
     }).join('') || '<div class="card c muted">Chưa có nhân viên chấm công.</div>';
@@ -661,7 +834,7 @@ ACT.exportCsv = function () {
 /* ---------- Tab: Thêm ---------- */
 function tMore() {
   var isChu = S.user && S.user.role === 'CHU';
-  var items = [['recs', '🗂', 'Bản ghi chấm công', 'Xem, sửa giờ, thêm ca quên chấm'], ['emps', '🧑‍🤝‍🧑', 'Nhân viên', 'Thêm, sửa, đổi PIN, mức lương'], ['shifts', '⏰', 'Ca làm', 'Giờ ca, hệ số, phụ cấp ca'], ['adj', '💰', 'Thưởng / phạt / ứng lương', 'Phụ cấp, thưởng, phạt, ứng'], ['hols', '🎉', 'Ngày lễ', 'Hệ số lương ngày lễ'], ['settings', '⚙️', 'Cài đặt', 'Ảnh, trễ/sớm, tăng ca, máy chấm công, PIN']];
+  var items = [['recs', '🗂', 'Bản ghi chấm công', 'Xem, sửa giờ, thêm ca quên chấm'], ['emps', '🧑‍🤝‍🧑', 'Nhân viên', 'Thêm, sửa, mã PIN, điện thoại, mức lương'], ['shifts', '⏰', 'Ca làm', 'Giờ ca, hệ số, phụ cấp ca'], ['adj', '💰', 'Thưởng / phạt / ứng lương', 'Phụ cấp, thưởng, phạt, ứng'], ['hols', '🎉', 'Ngày lễ', 'Hệ số lương ngày lễ'], ['settings', '⚙️', 'Cài đặt', 'Trễ/sớm, tăng ca, iPad, đổi PIN']];
   body('<div style="height:8px"></div>' + items.map(function (i) {
     return '<button class="card" data-act="sub" data-s="' + i[0] + '"><div class="row"><div style="font-size:26px">' + i[1] + '</div><div class="grow"><b>' + i[2] + '</b><div class="muted">' + i[3] + '</div></div><span class="muted">›</span></div></button>';
   }).join(''));
@@ -721,9 +894,15 @@ function sEmps(my) {
   api('empList').then(function (d) {
     if (my !== S.seq) return; S.empAll = d.emps;
     subShell('Nhân viên', '<button class="btn pri" data-act="empNew">＋ Thêm</button>', d.emps.map(function (e) {
-      return '<button class="card" style="' + (e.active ? '' : 'opacity:.5') + '" data-act="empEdit" data-id="' + esc(e.id) + '"><div class="row">' + av(e.name, e.id) + '<div class="grow"><b>' + esc(e.name) + '</b><div class="muted">' + (e.role === 'CHU' ? 'Chủ' : e.role === 'QL' ? 'Quản lý' : 'Nhân viên') + (e.active ? '' : ' · đã nghỉ') + (e.track ? '' : ' · không chấm công') + '</div></div><div class="money">' + (e.rate ? money(e.rate) + '<small class="muted">' + PAYU[e.payType] + '</small>' : '') + '</div><span class="go">✎</span></div></button>';
+      return '<button class="card" style="' + (e.active ? '' : 'opacity:.5') + '" data-act="empEdit" data-id="' + esc(e.id) + '"><div class="row">' + av(e.name, e.id) + '<div class="grow"><b>' + esc(e.name) + '</b><div class="muted">' + (e.role === 'CHU' ? 'Chủ' : e.role === 'QL' ? 'Quản lý' : 'Nhân viên') + (e.active ? '' : ' · đã nghỉ') + (e.track ? '' : ' · không chấm công') + (e.track && e.active ? (e.device ? ' · 📱 đã gắn máy' : ' · ⚠ chưa gắn máy') : '') + '</div></div><div class="money">' + (e.rate ? money(e.rate) + '<small class="muted">' + PAYU[e.payType] + '</small>' : '') + '</div><span class="go">✎</span></div></button>';
     }).join(''));
   }).catch(fail);
+}
+function devBox(e) {
+  if (!e || !e.track) return '';
+  return '<div class="card" style="margin:12px 0 0"><b>📱 Điện thoại chấm công</b><div class="muted" style="margin:4px 0 8px">' +
+    (e.device ? 'Đã gắn: ' + esc(e.device.name || 'điện thoại') + (e.device.lastUsedAt ? ' · chấm công gần nhất ' + ago(e.device.lastUsedAt) : ' · chưa chấm công lần nào') : 'Chưa gắn. Nhân viên đăng nhập bằng mã PIN trên điện thoại của họ để gắn.') + '</div>' +
+    (e.device ? '<button class="btn no" type="button" data-act="devReset" data-id="' + esc(e.id) + '" style="width:100%">Huỷ điện thoại này</button>' : '') + '</div>';
 }
 function empForm(e) {
   var isChu = S.user.role === 'CHU';
@@ -731,16 +910,30 @@ function empForm(e) {
     title: e ? 'Sửa nhân viên' : 'Thêm nhân viên', values: e || { role: 'NV', track: true, payType: 'HOUR', rate: 0, allowance: 0, active: true },
     fields: [{ k: 'name', label: 'Họ tên' },
       { k: 'role', label: 'Vai trò', type: 'select', options: isChu ? [{ v: 'NV', l: 'Nhân viên' }, { v: 'QL', l: 'Quản lý' }, { v: 'CHU', l: 'Chủ' }] : [{ v: 'NV', l: 'Nhân viên' }] },
-      { k: 'track', label: 'Có chấm công (hiện trên iPad)', type: 'switch' },
+      { k: 'track', label: 'Có chấm công', type: 'switch' },
       { k: 'payType', label: 'Kiểu lương', type: 'select', options: [{ v: 'HOUR', l: 'Theo giờ' }, { v: 'DAY', l: 'Theo ngày' }, { v: 'SHIFT', l: 'Theo ca' }, { v: 'MONTH', l: 'Theo tháng' }] },
       { k: 'rate', label: 'Mức lương (đ) — theo kiểu lương ở trên', type: 'number' },
       { k: 'allowance', label: 'Phụ cấp cố định / tháng (đ)', type: 'number', hint: 'Cộng vào lương tháng nếu có đi làm.' },
-      { k: 'pin', label: e ? 'PIN mới (để trống nếu không đổi)' : 'PIN (4 số)', type: 'pin' },
-      { k: 'active', label: 'Đang làm việc', type: 'switch' }, { k: 'note', label: 'Ghi chú' }],
+      { k: 'pin', label: e ? 'Mã PIN mới (để trống nếu không đổi)' : 'Mã PIN 4 số — đưa cho nhân viên để đăng nhập', type: 'pin' },
+      { type: 'html', html: '<button class="btn" type="button" data-act="pinGen" style="width:100%;margin:-2px 0 4px">🎲 Tạo mã ngẫu nhiên</button><div class="hint" id="pinGenMsg"></div>' },
+      { k: 'active', label: 'Đang làm việc', type: 'switch' }, { k: 'note', label: 'Ghi chú' },
+      { type: 'html', html: devBox(e) }],
     onSave: function (v) { v.id = e && e.id; return api('empSave', { emp: v }).then(function () { toast('Đã lưu'); openSub('emps'); }); },
     onDelete: e ? function () { return api('empDelete', { id: e.id }).then(function () { closeSheet(); toast('Đã xoá nhân viên'); openSub('emps'); }).catch(function (x) { closeSheet(); toast(x.message); }); } : null
   });
 }
+ACT.pinGen = function () {
+  api('pinSuggest').then(function (r) {
+    var i = $('#sheetHost [data-k="pin"]'); if (i) i.value = r.pin;
+    var m = $('#pinGenMsg'); if (m) m.innerHTML = 'Mã này chưa ai dùng: <b>' + r.pin + '</b>. Bấm Lưu rồi đưa mã cho nhân viên (lưu xong sẽ không xem lại được).';
+  }).catch(function (e) { toast(e.message); });
+};
+ACT.devReset = function (el) {
+  var id = el.dataset.id;
+  ask('Huỷ điện thoại của nhân viên này? Họ sẽ phải đăng nhập lại bằng mã PIN trên điện thoại.', 'Huỷ điện thoại', function () {
+    api('deviceReset', { empId: id }).then(function () { toast('Đã huỷ điện thoại'); openSub('emps'); }).catch(function (e) { toast(e.message); });
+  }, true);
+};
 ACT.empNew = function () { empForm(null); };
 ACT.empEdit = function (el) { empForm(S.empAll.filter(function (x) { return x.id === el.dataset.id; })[0]); };
 
@@ -817,12 +1010,10 @@ ACT.holEdit = function (el) { holForm(S.holAll.filter(function (x) { return x.da
 /* --- Cài đặt --- */
 var SETF = [
   ['Chung', [['shopName', 'Tên cửa hàng', 'text']]],
-  ['Chấm công', [['requirePin', 'Nhân viên phải nhập PIN (tắt: chỉ cần bấm tên rồi xác nhận)', 'switch']]],
   ['Đi trễ / về sớm', [['lateGrace', 'Cho phép đi trễ (phút) — trễ ít hơn thì không trừ', 'number'], ['earlyGrace', 'Cho phép về sớm (phút)', 'number'], ['lateFine', 'Phạt cố định mỗi lần đi trễ (đ, 0 = không phạt)', 'number'], ['earlyFine', 'Phạt cố định mỗi lần về sớm (đ)', 'number'], ['countEarly', 'Tính cả giờ đến sớm trước ca', 'switch']]],
   ['Tăng ca', [['otEnabled', 'Tính tăng ca', 'switch'], ['otAfter', 'Chỉ tính khi làm quá giờ ca từ (phút)', 'number'], ['otMult', 'Hệ số tăng ca (1.5 = 150%)', 'number']]],
   ['Tính lương', [['stdDays', 'Số ngày công chuẩn / tháng (lương tháng)', 'number'], ['stdHours', 'Số giờ / ngày công', 'number'], ['autoMatchShift', 'Chưa xếp lịch thì tự gán ca gần nhất (±2 giờ)', 'switch'], ['maxShiftHours', 'Ca mở quá bao nhiêu giờ thì coi là quên chốt', 'number'], ['matchWindow', 'Tự gán ca: chấm công cách giờ bắt đầu ca tối đa (phút)', 'number']]],
-  ['Màn hình iPad', [['kioskIdleSec', 'Tự về màn hình chính sau (giây không chạm)', 'number'], ['doneSec', 'Màn "Đã ghi nhận" hiện trong (giây)', 'number']]],
-  ['Ảnh', [['requirePhoto', 'Bắt buộc chụp ảnh khi chấm công (bật khi bạn không ở quán)', 'switch']]]
+  ['Điện thoại nhân viên', [['doneSec', 'Màn "Đã ghi nhận" hiện trong (giây)', 'number']]]
 ];
 function sSettings(my) {
   subShell('Cài đặt', '', '<div class="muted c">Đang tải…</div>');
@@ -832,7 +1023,7 @@ function sSettings(my) {
     h += '<div class="btns"><button class="btn pri" data-act="saveSettings">Lưu cài đặt</button></div>';
     if (!INSTALLED) h += '<div class="sec">Cài ứng dụng</div><div class="card">' + (installEvt ? '<button class="btn pri" style="width:100%" data-act="installApp">Cài ứng dụng về máy này</button>' :
       '<p class="muted" style="margin:0">' + (IOS ? 'Bấm nút Chia sẻ → "Thêm vào MH chính".' : 'Bấm ⋮ trên Chrome → "Cài đặt ứng dụng" (hoặc biểu tượng cài đặt ở thanh địa chỉ).') + '</p>') + '</div>';
-    h += '<div class="sec">Máy chấm công (iPad ở quầy)</div><div class="card"><p class="muted" style="margin-top:0">Chỉ máy đã đăng ký mới hiện danh sách nhân viên để chấm công. Có ' + d.kioskCount + ' máy đã đăng ký.</p>' +
+    h += '<div class="sec">Máy chấm công (iPad ở quầy)</div><div class="card"><p class="muted" style="margin-top:0">Chỉ iPad đã đăng ký mới hiện mã QR chấm công. Có ' + d.kioskCount + ' máy đã đăng ký.</p>' +
       '<button class="btn pri" style="width:100%;margin-bottom:8px" data-act="regKiosk">Dùng thiết bị này làm MÁY CHẤM CÔNG</button>' +
       (S.kioskToken ? '<button class="btn" style="width:100%;margin-bottom:8px" data-act="unregKiosk">Huỷ đăng ký thiết bị này</button>' : '') +
       '<button class="btn ghost" style="width:100%" data-act="clearKiosk">Huỷ tất cả máy chấm công</button></div>';
@@ -848,7 +1039,7 @@ ACT.installApp = function () {
 ACT.saveSettings = function (el) {
   var v = {}; SETF.forEach(function (g) { g[1].forEach(function (f) { var i = $('#body [data-k="' + f[0] + '"]'); if (i) v[f[0]] = f[2] === 'switch' ? i.checked : (f[2] === 'number' ? Number(i.value) : i.value); }); });
   el.disabled = true;
-  api('settingsSet', { values: v }).then(function (r) { el.disabled = false; S.boot.shopName = r.settings.shopName; paintPhotoPill(r.settings.requirePhoto); toast('Đã lưu cài đặt'); }).catch(function (e) { el.disabled = false; toast(e.message); });
+  api('settingsSet', { values: v }).then(function (r) { el.disabled = false; S.boot.shopName = r.settings.shopName; toast('Đã lưu cài đặt'); }).catch(function (e) { el.disabled = false; toast(e.message); });
 };
 ACT.regKiosk = function (el) {
   var fromBanner = el && el.dataset && el.dataset.from === 'banner';
@@ -882,8 +1073,8 @@ function start() {
   call('boot', { deviceToken: S.kioskToken }).then(function (b) {
     S.boot = b; S.clockOff = b.serverNow - Date.now();
     if (S.kioskToken && !b.isKiosk) { S.kioskToken = ''; lsSet('kioskToken', null); }
-    if (S.token && !b.isKiosk) { api('pendingCount').then(function () { vMgr(); }).catch(function () { vLogin(); }); return; }
-    if (b.isKiosk) vKiosk(); else vLogin();
+    if (S.token && !b.isKiosk) { api('pendingCount').then(function () { vMgr(); }).catch(function () { vHome(); }); return; }
+    vHome();
   }).catch(function (e) { app.innerHTML = '<div class="login"><h2>Không mở được ứng dụng</h2><p>' + esc(e.message) + '</p><button class="btn" onclick="location.reload()">Thử lại</button></div>'; });
 }
 start();
