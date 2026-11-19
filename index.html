@@ -59,7 +59,8 @@ h1,h2,h3{margin:0}
 .emp.in{border-color:#6ee7b7;background:#f3fcf8}
 .st{font-weight:700;font-size:13px;border-radius:20px;padding:3px 11px;background:var(--chip);color:var(--ink2)}.st.in{background:var(--okbg);color:var(--ok)}
 .kfoot{margin-top:16px;text-align:center}
-.kfoot .btn{border-radius:999px;min-height:44px;padding:8px 18px;font-size:14px;color:var(--mut);box-shadow:none}
+.kfoot .btn{border:0;background:none;box-shadow:none;min-height:44px;padding:10px 16px;font-size:12px;font-weight:500;color:var(--mut);opacity:.55}
+.kfoot .btn:active{opacity:1}
 /* sheet */
 .ov{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50}
 .sheet{background:var(--bg);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:28px 28px 0 0;padding:12px 18px 26px;box-shadow:0 -6px 30px rgba(15,23,42,.2);position:relative}
@@ -281,7 +282,7 @@ document.addEventListener('touchstart', resetIdle, { passive: true });
 function vKiosk() {
   S.view = 'kiosk'; clearInterval(S.pollT); clearInterval(S.kioskT);
   app.innerHTML = '<div class="kiosk"><header class="kban"><div class="logo">' + esc(logoCh()) + '</div><div class="ktxt"><h1>' + esc(S.boot.shopName) + '</h1><div class="hi" id="hi"></div></div><div class="clock"><b id="clk"></b><span id="dt"></span></div></header>' +
-    '<div class="kmain"><div id="kbar"></div><div class="grid" id="grid"><div class="muted">Đang tải…</div></div><div class="kfoot"><button class="btn ghost" data-act="mgrLogin">🔒 Quản lý</button></div></div></div>';
+    '<div class="kmain"><div id="kbar"></div><div class="grid" id="grid"><div class="muted">Đang tải…</div></div><div class="kfoot"><button class="btn ghost" data-act="mgrLogin">Quản lý</button></div></div></div>';
   startClock(); loadKiosk(); resetIdle();
   S.kioskT = setInterval(function () { if (!$('#sheetHost').firstChild) loadKiosk(true); }, 30000);
 }
