@@ -915,6 +915,21 @@ function devBox(e) {
     (e.device ? 'Đã gắn: ' + esc(e.device.name || 'điện thoại') + (e.device.lastUsedAt ? ' · chấm công gần nhất ' + ago(e.device.lastUsedAt) : ' · chưa chấm công lần nào') : 'Chưa gắn. Nhân viên đăng nhập bằng mã PIN trên điện thoại của họ để gắn.') + '</div>' +
     (e.device ? '<button class="btn no" type="button" data-act="devReset" data-id="' + esc(e.id) + '" style="width:100%">Huỷ điện thoại này</button>' : '') + '</div>';
 }
+function pinNow(e) {
+  if (!e) return '';
+  var h = '<div class="card" style="margin:0 0 10px"><b>🔑 Mã PIN hiện tại</b><div style="margin:6px 0 0" id="pinNowBox">';
+  if (e.role !== 'NV') return h + '<div class="muted">Mã của quản lý / chủ được giữ kín để an toàn. Muốn đổi, nhập mã mới ở ô bên dưới.</div></div></div>';
+  if (e.pin) return h + pinBig(e.pin) + '</div></div>';
+  return h + '<div class="muted" style="margin-bottom:8px">Nhân viên này tạo từ trước nên chưa hiện mã.</div><button class="btn" type="button" data-act="pinShow" data-id="' + esc(e.id) + '" style="width:100%">👁 Xem mã hiện tại</button></div></div>';
+}
+function pinBig(p) { return '<div style="font-size:34px;font-weight:800;letter-spacing:.35em;text-indent:.35em;text-align:center;font-variant-numeric:tabular-nums">' + esc(p) + '</div>'; }
+ACT.pinShow = function (el) {
+  el.disabled = true; el.textContent = 'Đang tìm mã…';
+  api('pinReveal', { id: el.dataset.id }).then(function (r) {
+    var b = $('#pinNowBox'); if (b) b.innerHTML = pinBig(r.pin);
+    var x = S.empAll && S.empAll.filter(function (z) { return z.id === el.dataset.id; })[0]; if (x) x.pin = r.pin;
+  }).catch(function (x) { el.disabled = false; el.textContent = '👁 Xem mã hiện tại'; toast(x.message); });
+};
 function empForm(e) {
   var isChu = S.user.role === 'CHU';
   openForm({
@@ -925,7 +940,8 @@ function empForm(e) {
       { k: 'payType', label: 'Kiểu lương', type: 'select', options: [{ v: 'HOUR', l: 'Theo giờ' }, { v: 'DAY', l: 'Theo ngày' }, { v: 'SHIFT', l: 'Theo ca' }, { v: 'MONTH', l: 'Theo tháng' }] },
       { k: 'rate', label: 'Mức lương (đ) — theo kiểu lương ở trên', type: 'number' },
       { k: 'allowance', label: 'Phụ cấp cố định / tháng (đ)', type: 'number', hint: 'Cộng vào lương tháng nếu có đi làm.' },
-      { k: 'pin', label: e ? 'Mã PIN mới (để trống nếu không đổi)' : 'Mã PIN 4 số — đưa cho nhân viên để đăng nhập', type: 'pin' },
+      { type: 'html', html: pinNow(e) },
+      { k: 'pin', label: e ? 'Đổi sang mã PIN mới (để trống nếu không đổi)' : 'Mã PIN 4 số — đưa cho nhân viên để đăng nhập', type: 'pin' },
       { type: 'html', html: '<button class="btn" type="button" data-act="pinGen" style="width:100%;margin:-2px 0 4px">🎲 Tạo mã ngẫu nhiên</button><div class="hint" id="pinGenMsg"></div>' },
       { k: 'active', label: 'Đang làm việc', type: 'switch' }, { k: 'note', label: 'Ghi chú' },
       { type: 'html', html: devBox(e) }],
@@ -936,7 +952,7 @@ function empForm(e) {
 ACT.pinGen = function () {
   api('pinSuggest').then(function (r) {
     var i = $('#sheetHost [data-k="pin"]'); if (i) i.value = r.pin;
-    var m = $('#pinGenMsg'); if (m) m.innerHTML = 'Mã này chưa ai dùng: <b>' + r.pin + '</b>. Bấm Lưu rồi đưa mã cho nhân viên (lưu xong sẽ không xem lại được).';
+    var m = $('#pinGenMsg'); if (m) m.innerHTML = 'Mã này chưa ai dùng: <b>' + r.pin + '</b>. Bấm Lưu rồi đưa mã cho nhân viên (sau này vẫn xem lại được trong màn hình này).';
   }).catch(function (e) { toast(e.message); });
 };
 ACT.devReset = function (el) {
