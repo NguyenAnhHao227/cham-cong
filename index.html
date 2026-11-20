@@ -1075,7 +1075,7 @@ ACT.exportCsv = function () {
   rows.push([]); rows.push(['Nhân viên', 'Số ca', 'Giờ công', 'Lương', 'Tăng ca', 'Phụ cấp', 'Thưởng', 'Phạt', 'Ứng', 'Thực lĩnh']);
   S.rep.rows.forEach(function (R) { rows.push([R.name, R.shifts, (R.paidMin / 60).toFixed(1), R.base, R.ot, R.shiftAllow + R.allowance, R.bonus, R.penalty + R.fine, R.advance, R.net]); });
   var csv = '﻿' + rows.map(function (r) { return r.map(q).join(','); }).join('\r\n');
-  try { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })); a.download = 'chamcong_' + S.month + '.csv'; document.body.appendChild(a); a.click(); a.remove(); }
+  try { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([String.fromCharCode(65279) + csv], { type: 'text/csv;charset=utf-8' })); a.download = 'chamcong_' + S.month + '.csv'; document.body.appendChild(a); a.click(); a.remove(); }
   catch (e) { toast('Không tải được, hãy dùng "Xuất ra Google Sheet"'); }
 };
 
