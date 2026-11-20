@@ -268,6 +268,9 @@ a{color:var(--pri)}
 @keyframes dnbar{to{transform:scaleX(0)}}
 /* --- cài đặt: danh sách mục + chi tiết --- */
 .setlist{margin-bottom:8px}
+.dlk{display:flex;align-items:center;gap:10px;padding:10px 0}.dlk+.dlk{border-top:1px solid var(--line)}.dlk b{display:block;font-size:15px}.dlk small{display:block;color:var(--mut);font-size:12px;word-break:break-all}
+.dlk a.btn,.card a.btn{flex:none;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:var(--ink)}
+.rsopt{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:16px;margin-bottom:8px}.rsopt input{margin-top:4px;flex:none}.rsopt b{display:block}.rsopt small{display:block;color:var(--mut);font-size:13px;margin-top:2px}
 .setitem{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:20px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow)}
 .setitem small{display:block;color:var(--mut);font-size:12px;font-weight:500;line-height:1.3}
 .setitem .seti{width:42px;height:42px;border-radius:14px;background:var(--chip);display:grid;place-items:center;font-size:21px;flex:none}
@@ -1279,25 +1282,31 @@ var SSECS = [
   { id: 'late', ic: '⏰', t: 'Đi trễ / về sớm', d: 'Số phút châm chước, tiền phạt', f: [['lateGrace', 'Cho phép đi trễ (phút) — trễ ít hơn thì không trừ', 'number'], ['earlyGrace', 'Cho phép về sớm (phút)', 'number'], ['lateFine', 'Phạt cố định mỗi lần đi trễ (đ, 0 = không phạt)', 'number'], ['earlyFine', 'Phạt cố định mỗi lần về sớm (đ)', 'number'], ['countEarly', 'Tính cả giờ đến sớm trước ca', 'switch']] },
   { id: 'ot', ic: '⚡', t: 'Tăng ca', d: 'Bật/tắt, ngưỡng, hệ số', f: [['otEnabled', 'Tính tăng ca', 'switch'], ['otAfter', 'Chỉ tính khi làm quá giờ ca từ (phút)', 'number'], ['otMult', 'Hệ số tăng ca (1.5 = 150%)', 'number']] },
   { id: 'pay', ic: '💰', t: 'Tính lương', d: 'Ngày công chuẩn, tự gán ca, quên chốt', f: [['stdDays', 'Số ngày công chuẩn / tháng (lương tháng)', 'number'], ['stdHours', 'Số giờ / ngày công', 'number'], ['autoMatchShift', 'Tự gán ca gần nhất khi chưa xếp lịch hoặc chấm công lệch xa lịch (±2 giờ)', 'switch'], ['maxShiftHours', 'Ca mở quá bao nhiêu giờ thì coi là quên chốt', 'number'], ['matchWindow', 'Tự gán ca: chấm công cách giờ bắt đầu ca tối đa (phút)', 'number']] },
-  { id: 'phone', ic: '📱', t: 'Màn hình nhân viên', d: 'Thời gian hiện "Đã ghi nhận"', f: [['doneSec', 'Màn "Đã ghi nhận" hiện trong (giây)', 'number']] }
+  { id: 'phone', ic: '📱', t: 'Màn hình nhân viên', d: 'Thời gian hiện "Đã ghi nhận"', f: [['doneSec', 'Màn "Đã ghi nhận" hiện trong (giây)', 'number']] },
+  { id: 'data', ic: '🗄️', t: 'Dữ liệu & sao lưu', d: 'Dữ liệu nằm ở đâu, sao lưu, reset', f: [], chu: true }
 ];
+function isChuNow() { return !!(S.user && S.user.role === 'CHU'); }
+function secList() { return SSECS.filter(function (s) { return !s.chu || isChuNow(); }); }
 function secById(id) { return SSECS.filter(function (s) { return s.id === id; })[0]; }
 function sSettings(my) {
+  S.dataD = null; S.dataLoading = false;
   subShell('Cài đặt', '', '<div class="muted c">Đang tải…</div>');
   api('settingsGet').then(function (d) { if (my !== S.seq) return; S.setD = d; renderSettings(); }).catch(fail);
 }
 function renderSettings() {
   var d = S.setD; if (!d) return;
-  var wide = !!(window.matchMedia && matchMedia('(min-width:760px)').matches), sel = S.setSec && secById(S.setSec) ? S.setSec : (wide ? 'shop' : null);
-  var list = '<div class="setlist">' + SSECS.map(function (s) {
+  var wide = !!(window.matchMedia && matchMedia('(min-width:760px)').matches), sel = S.setSec && secList().some(function (x) { return x.id === S.setSec; }) ? S.setSec : (wide ? 'shop' : null);
+  var list = '<div class="setlist">' + secList().map(function (s) {
     return '<button class="setitem' + (sel === s.id ? ' on' : '') + '" data-act="setSec" data-id="' + s.id + '"><span class="seti">' + s.ic + '</span><span class="grow"><b>' + esc(s.t) + '</b><small>' + esc(s.d) + '</small></span><span class="muted">›</span></button>';
   }).join('') + '</div>';
   var det = '';
   if (sel) { var sc = secById(sel); det = '<div class="setdet">' + (wide ? '' : '<button class="btn setback" data-act="setBack">‹ Tất cả cài đặt</button>') + '<h3 class="seth">' + sc.ic + ' ' + esc(sc.t) + '</h3>' + sectionHTML(sc, d) + '</div>'; }
   subShell('Cài đặt', '', wide ? '<div class="setgrid">' + list + det + '</div>' : (sel ? det : list));
+  if (sel === 'data' && !S.dataD && !S.dataLoading) loadData();
 }
 function sectionHTML(sc, d) {
   var st = d.settings, h = '';
+  if (sc.id === 'data') return S.dataD ? dataHTML(S.dataD) : '<div class="muted c" style="padding:20px 0">Đang tải…</div>';
   if (sc.id === 'qr') {
     h += '<div class="card"><p class="muted" style="margin:0 0 8px">' + (st.kioskPin ? '✅ Đã đặt mã mở khoá.' : '⚠️ Chưa đặt mã mở khoá — iPad sẽ chưa hiện mã QR cho tới khi bạn đặt.') + ' Chủ nhập mã này trên iPad thì mã QR mới hiện ra; không ai khác nhìn thấy mã QR.</p>' +
       sc.f.map(function (f) { return fieldHTML({ k: f[0], label: f[1], type: f[2] }, st[f[0]]); }).join('') + '</div>' +
@@ -1320,6 +1329,63 @@ function sectionHTML(sc, d) {
 }
 ACT.setSec = function (el) { S.setSec = el.dataset.id; renderSettings(); window.scrollTo(0, 0); };
 ACT.setBack = function () { S.setSec = null; renderSettings(); window.scrollTo(0, 0); };
+/* --- Dữ liệu & sao lưu (chỉ Chủ) --- */
+function loadData() {
+  S.dataLoading = true; var my = S.seq;
+  api('dataInfo').then(function (d) { S.dataLoading = false; if (my !== S.seq) return; S.dataD = d; renderSettings(); })
+    .catch(function (e) { S.dataLoading = false; if (my !== S.seq) return; var b = $('#body .setdet'); if (b) b.innerHTML += '<div class="card c">' + esc(e.message) + '<br><br><button class="btn" data-act="dataReload">Thử lại</button></div>'; });
+}
+ACT.dataReload = function () { S.dataD = null; renderSettings(); };
+function fdt(ms) { var d = ymd(ms), t = hm(ms); return d.slice(8) + '/' + d.slice(5, 7) + '/' + d.slice(0, 4) + ' ' + t; }
+function dlink(ic, title, sub, url, label) {
+  return '<div class="dlk"><span class="seti">' + ic + '</span><div class="grow"><b>' + esc(title) + '</b>' + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</div>' +
+    (url ? '<a class="btn" href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(label || 'Mở') + '</a>' : '<span class="muted">—</span>') + '</div>';
+}
+function dataHTML(d) {
+  var h = '<div class="sec">Dữ liệu của bạn nằm ở đâu</div><div class="card"><p class="muted" style="margin:0 0 4px">Toàn bộ chấm công, nhân viên, lương nằm trong một file Google Sheet trên Google Drive của chủ. Đừng xoá file này.</p>' +
+    dlink('📗', 'Google Sheet dữ liệu', d.sheetName, d.sheetUrl) +
+    dlink('🧩', 'Mã chương trình (Apps Script)', 'Chỉ mở khi cần sửa mã; đừng xoá dự án', d.scriptEditUrl) +
+    dlink('🌐', 'Địa chỉ máy chủ của ứng dụng', d.webUrl, d.webUrl) +
+    dlink('📁', 'Thư mục sao lưu trên Drive', 'Sao lưu chấm công', d.folderUrl) + '</div>';
+  var b = d.backups || { total: 0, items: [] };
+  h += '<div class="sec">Sao lưu</div><div class="card"><p class="muted" style="margin:0 0 10px">Mỗi bản sao lưu là một file Google Sheet đầy đủ (kèm cả mã chương trình), mở lên xem như bình thường. Mỗi lần reset app tự sao lưu trước.</p>' +
+    (d.backupError ? '<p style="color:var(--no)">Chưa dùng được Drive: ' + esc(d.backupError) + '</p>' : '') +
+    '<button class="btn pri" style="width:100%;margin-bottom:6px" data-act="backupNow">💾 Sao lưu ngay</button>' +
+    (b.items.length ? b.items.map(function (x) { return dlink('🗂', x.name.replace(/^Sao lưu chấm công /, ''), fdt(x.at), x.url); }).join('') + (b.total > b.items.length ? '<p class="muted c" style="margin:8px 0 0">Còn ' + (b.total - b.items.length) + ' bản cũ hơn trong thư mục sao lưu.</p>' : '') : '<p class="muted c" style="margin:10px 0 0">Chưa có bản sao lưu nào.</p>') + '</div>';
+  h += '<div class="sec">Reset dữ liệu</div><div class="card"><p class="muted" style="margin:0 0 10px">Dùng khi test xong và muốn làm lại từ đầu. Có 3 mức, app sao lưu trước rồi mới xoá. Tài khoản Chủ luôn được giữ.</p>' +
+    '<button class="btn no" style="width:100%" data-act="dataReset">Reset dữ liệu…</button></div>';
+  return h;
+}
+ACT.backupNow = function (el) {
+  el.disabled = true; el.textContent = 'Đang sao lưu…';
+  api('backupNow').then(function (r) { toast('Đã sao lưu'); S.dataD.backups = r.backups; S.dataD.folderUrl = r.folderUrl; renderSettings(); })
+    .catch(function (e) { toast(e.message); el.disabled = false; el.textContent = '💾 Sao lưu ngay'; });
+};
+ACT.dataReset = function () {
+  var c = S.dataD.counts, n1 = c.ChamCong + ' bản ghi chấm công, ' + c.LichLam + ' dòng lịch ca, ' + c.DieuChinh + ' khoản thưởng/phạt/ứng' + (c.BaoCao ? ', ' + c.BaoCao + ' tab báo cáo đã xuất' : '');
+  function opt(v, t, desc, on) { return '<label class="rsopt"><input type="radio" name="lvl" value="' + v + '"' + (on ? ' checked' : '') + '><span><b>' + t + '</b><small>' + esc(desc) + '</small></span></label>'; }
+  openSheet('<h2 style="margin:0 0 4px">Reset dữ liệu</h2><p class="muted" style="margin:0 0 10px">App sao lưu một bản đầy đủ vào Drive trước khi xoá. Nếu sao lưu lỗi thì sẽ không xoá gì.</p>' +
+    opt('DATA', 'Chỉ xoá chấm công test', 'Xoá ' + n1 + '. Giữ nhân viên, ca làm, ngày lễ, cài đặt.', true) +
+    opt('STAFF', 'Xoá cả nhân viên', 'Như trên, thêm ' + c.NhanVienKhac + ' nhân viên/quản lý (trừ Chủ) và ' + c.ThietBi + ' điện thoại đã đăng ký.') +
+    opt('ALL', 'Về trạng thái mới tinh', 'Như trên, thêm ' + c.NgayLe + ' ngày lễ, ca làm (tạo lại 3 ca mặc định), cài đặt về mặc định (giữ tên cửa hàng), mã mở khoá và máy chấm công iPad.') +
+    '<label class="fld"><span>PIN của Chủ</span><input id="rsPin" type="tel" inputmode="numeric" maxlength="4" pattern="[0-9]*" autocomplete="off" placeholder="4 chữ số"></label>' +
+    '<label class="fld"><span>Gõ chữ RESET để xác nhận</span><input id="rsConf" type="text" autocomplete="off" autocapitalize="characters" placeholder="RESET"></label>' +
+    '<div class="btns"><button class="btn no" data-act="dataResetGo">Sao lưu rồi reset</button><button class="btn ghost" data-act="sheetClose">Huỷ</button></div>', { sticky: true });
+};
+ACT.dataResetGo = function (el) {
+  var lv = $('#sheetHost input[name="lvl"]:checked'), pin = $('#rsPin').value, conf = $('#rsConf').value;
+  if (!/^\d{4}$/.test(pin)) { toast('Nhập PIN 4 số của Chủ'); return; }
+  if (conf.trim().toUpperCase() !== 'RESET') { toast('Hãy gõ đúng chữ RESET'); return; }
+  el.disabled = true; el.textContent = 'Đang sao lưu và xoá…';
+  api('dataReset', { level: lv ? lv.value : 'DATA', pin: pin, confirm: conf }).then(function (r) {
+    var d = r.deleted, parts = [];
+    [['ChamCong', 'bản ghi chấm công'], ['LichLam', 'dòng lịch ca'], ['DieuChinh', 'khoản thưởng/phạt/ứng'], ['BaoCao', 'tab báo cáo'], ['NhanVien', 'nhân viên'], ['ThietBi', 'điện thoại'], ['NgayLe', 'ngày lễ'], ['CaLam', 'ca làm cũ']].forEach(function (x) { if (d[x[0]]) parts.push(d[x[0]] + ' ' + x[1]); });
+    openSheet('<h2 style="margin:0 0 6px">✅ Đã reset</h2><p>Đã xoá: ' + esc(parts.join(', ') || 'không có gì để xoá') + '.</p><div class="card"><b>Bản sao lưu</b><div class="muted" style="margin:4px 0 8px;word-break:break-word">' + esc(r.backup.name) + '</div><a class="btn" href="' + esc(r.backup.url) + '" target="_blank" rel="noopener">Mở bản sao lưu</a></div>' +
+      '<div class="btns"><button class="btn pri" data-act="dataDone">Xong</button></div>', { sticky: true });
+  }).catch(function (e) { toast(e.message); el.disabled = false; el.textContent = 'Sao lưu rồi reset'; });
+};
+ACT.dataDone = function () { closeSheet(); S.setSec = 'data'; openSub('settings'); };
+
 ACT.installApp = function () {
   if (!installEvt) return;
   installEvt.prompt();
